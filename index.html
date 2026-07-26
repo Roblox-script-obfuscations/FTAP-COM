@@ -14,6 +14,14 @@
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+    /* Prevent Safari from auto-boosting small font sizes */
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+      height: 100%;
+      overflow-x: hidden;
+    }
+
     :root {
       --glass: rgba(12,12,22,0.78);
       --glass-border: rgba(255,255,255,0.08);
@@ -24,17 +32,11 @@
       --card-bg: rgba(14,14,26,0.80);
     }
 
-    html {
-      height: 100%;
-      overflow-x: hidden;
-    }
-
     body {
       min-height: 100%;
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       color: var(--text);
       overflow-x: hidden;
-      /* prevent elastic scroll showing white */
       background: #06041a;
     }
 
@@ -43,11 +45,11 @@
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       width: 100%; height: 100%;
-      background-image: url('https://i.pinimg.com/1200x/e1/95/97/e195971a0e803c0501e1617d4a644bfd.jpg');
+      background-image: url('https://i.pinimg.com/1200x/cc/3d/2f/cc3d2fe88f97edc843fc485e50e9c066.jpg');
       background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
-      background-attachment: scroll; /* iOS compat */
+      background-attachment: scroll;
       z-index: 0;
       transform: translateZ(0);
       -webkit-transform: translateZ(0);
@@ -77,7 +79,7 @@
       height: 56px;
       display: flex;
       align-items: center;
-      padding: 0 20px;
+      padding: 0 16px;
       gap: 4px;
       background: rgba(8,6,22,0.6);
       backdrop-filter: blur(20px);
@@ -85,15 +87,47 @@
       border-bottom: 1px solid var(--glass-border);
     }
 
+    /* Logo area: icon + typing text */
     .nav-logo {
-      font-size: 16px;
-      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 7px;
       margin-right: auto;
+      min-width: 0;
+      overflow: hidden;
+      flex-shrink: 1;
+    }
+
+    .nav-logo-icon {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    .nav-logo-text {
+      font-size: 13px;
+      font-weight: 800;
       background: linear-gradient(135deg,#a78bfa,#60a5fa);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      letter-spacing: -0.3px;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    /* Typing cursor */
+    .nav-logo-text::after {
+      content: '|';
+      -webkit-text-fill-color: #a78bfa;
+      opacity: 1;
+      animation: blink 0.7s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
     }
 
     .nav-btn {
@@ -102,11 +136,13 @@
       color: var(--muted);
       font-size: 13px;
       font-weight: 600;
-      padding: 6px 14px;
+      padding: 6px 12px;
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.16s;
       -webkit-tap-highlight-color: transparent;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     .nav-btn:hover, .nav-btn:active { color: #fff; background: rgba(255,255,255,0.07); }
     .nav-btn.active {
@@ -135,7 +171,7 @@
       background: var(--card-bg);
       border: 1px solid var(--glass-border);
       border-radius: 16px;
-      padding: 36px 28px;
+      padding: 28px 20px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.55);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
@@ -151,23 +187,23 @@
       letter-spacing: 0.5px;
       padding: 4px 10px;
       border-radius: 20px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       text-transform: uppercase;
     }
 
-    h1 { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 8px; letter-spacing: -0.5px; }
+    h1 { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 6px; letter-spacing: -0.5px; }
 
-    .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 28px; line-height: 1.55; }
+    .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 20px; line-height: 1.55; }
 
     .endpoint {
       background: rgba(6,6,16,0.75);
       border: 1px solid var(--glass-border);
       border-radius: 10px;
-      padding: 14px 16px;
-      margin-bottom: 20px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
     }
     .endpoint-left {
@@ -181,15 +217,15 @@
     .method {
       background: var(--green);
       color: #000;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 800;
-      padding: 3px 8px;
+      padding: 3px 7px;
       border-radius: 5px;
       flex-shrink: 0;
     }
     .url {
       font-family: 'Consolas','Monaco',monospace;
-      font-size: 12px;
+      font-size: 11px;
       color: #a5b4fc;
       white-space: nowrap;
       overflow: hidden;
@@ -201,7 +237,7 @@
       color: #a5b4fc;
       font-size: 12px;
       font-weight: 700;
-      padding: 7px 15px;
+      padding: 7px 14px;
       border-radius: 7px;
       cursor: pointer;
       flex-shrink: 0;
@@ -211,27 +247,33 @@
     .copy-btn:hover, .copy-btn:active { background: rgba(124,77,255,0.35); color: #fff; }
     .copy-btn.copied { background: rgba(34,197,94,0.18); border-color: rgba(34,197,94,0.45); color: var(--green); }
 
-    /* Scrollable code block — same style home & cards */
+    /* Scrollable code block */
     .code-block {
       background: rgba(4,4,14,0.8);
       border: 1px solid rgba(255,255,255,0.06);
       border-radius: 10px;
-      padding: 14px;
+      padding: 12px;
       overflow-x: auto;
       overflow-y: auto;
-      max-height: 160px;
-      margin-bottom: 20px;
+      max-height: 140px;
+      margin-bottom: 16px;
+      /* Force GPU layer so mobile doesn't mis-scale */
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
     }
     .code-block pre {
       font-family: 'Consolas','Monaco',monospace;
-      font-size: 11px;
+      font-size: 10.5px;
       line-height: 1.6;
       color: #c4b5fd;
-      white-space: pre;   /* keeps indentation; scrolls inside */
+      white-space: pre;
       width: max-content;
       min-width: 100%;
+      /* Hard stop: Safari must not enlarge this */
+      -webkit-text-size-adjust: none;
+      text-size-adjust: none;
     }
-    .code-block::-webkit-scrollbar { width: 5px; height: 5px; }
+    .code-block::-webkit-scrollbar { width: 4px; height: 4px; }
     .code-block::-webkit-scrollbar-track { background: transparent; }
     .code-block::-webkit-scrollbar-thumb { background: rgba(124,77,255,0.4); border-radius: 4px; }
 
@@ -244,22 +286,22 @@
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.06);
       border-radius: 10px;
-      padding: 18px 20px;
+      padding: 16px 18px;
     }
-    .overview h3 { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 8px; font-weight: 700; }
+    .overview h3 { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 7px; font-weight: 700; }
     .overview p  { font-size: 13px; line-height: 1.65; color: #ccc; }
 
-    .footer { margin-top: 24px; text-align: center; font-size: 12px; color: #444; }
+    .footer { margin-top: 20px; text-align: center; font-size: 11px; color: #444; }
 
     /* ══ SCRIPTS ════════════════════════════════ */
-    .scripts-header { margin-bottom: 24px; }
-    .scripts-header h2 { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.4px; margin-bottom: 4px; }
+    .scripts-header { margin-bottom: 20px; }
+    .scripts-header h2 { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -0.4px; margin-bottom: 4px; }
     .scripts-header p  { font-size: 13px; color: var(--muted); }
 
     .scripts-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 18px;
+      gap: 16px;
     }
 
     /* ── Script card ── */
@@ -267,11 +309,10 @@
       background: var(--card-bg);
       border: 1px solid var(--glass-border);
       border-radius: 16px;
-      padding: 20px;
+      padding: 18px;
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       box-shadow: 0 12px 40px rgba(0,0,0,0.45);
-      /* IMPORTANT: clip children so code never overflows card */
       overflow: hidden;
       transition: border-color 0.2s;
     }
@@ -281,8 +322,8 @@
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 14px;
+      gap: 10px;
+      margin-bottom: 12px;
       flex-wrap: nowrap;
     }
 
@@ -295,11 +336,11 @@
       background: rgba(124,77,255,0.14);
       border: 1px solid rgba(124,77,255,0.28);
       border-radius: 4px;
-      padding: 2px 8px;
+      padding: 2px 7px;
       display: inline-block;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
-    .card-title { font-size: 16px; font-weight: 800; color: #fff; }
+    .card-title { font-size: 15px; font-weight: 800; color: #fff; }
 
     /* Like button */
     .like-btn {
@@ -309,7 +350,7 @@
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 8px;
-      padding: 6px 12px;
+      padding: 6px 11px;
       cursor: pointer;
       color: var(--muted);
       font-size: 13px;
@@ -319,35 +360,38 @@
       white-space: nowrap;
       -webkit-tap-highlight-color: transparent;
     }
-    .like-btn i { font-size: 17px; }
+    .like-btn i { font-size: 16px; }
     .like-btn:hover { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.35); color: #f87171; }
     .like-btn.liked { background: rgba(239,68,68,0.18); border-color: rgba(239,68,68,0.45); color: #f87171; }
     .like-btn.liked i.bx-heart    { display: none; }
     .like-btn:not(.liked) i.bxs-heart { display: none; }
 
-    /* Card code — clipped, scrollable in both axes */
+    /* Card code */
     .card-code {
       background: rgba(4,4,14,0.8);
       border: 1px solid rgba(255,255,255,0.06);
       border-radius: 10px;
-      padding: 14px;
+      padding: 12px;
       overflow-x: auto;
       overflow-y: auto;
-      max-height: 160px;
-      margin-bottom: 14px;
-      /* prevent card from expanding horizontally */
+      max-height: 130px;
+      margin-bottom: 12px;
       width: 100%;
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
     }
     .card-code pre {
       font-family: 'Consolas','Monaco',monospace;
-      font-size: 12px;
+      font-size: 11px;
       line-height: 1.6;
       color: #a5b4fc;
       white-space: pre;
       width: max-content;
       min-width: 100%;
+      -webkit-text-size-adjust: none;
+      text-size-adjust: none;
     }
-    .card-code::-webkit-scrollbar { width: 5px; height: 5px; }
+    .card-code::-webkit-scrollbar { width: 4px; height: 4px; }
     .card-code::-webkit-scrollbar-track { background: transparent; }
     .card-code::-webkit-scrollbar-thumb { background: rgba(124,77,255,0.35); border-radius: 4px; }
 
@@ -367,13 +411,13 @@
       color: #a5b4fc;
       font-size: 12px;
       font-weight: 700;
-      padding: 8px 18px;
+      padding: 8px 16px;
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.15s;
       -webkit-tap-highlight-color: transparent;
     }
-    .card-copy-btn i { font-size: 15px; }
+    .card-copy-btn i { font-size: 14px; }
     .card-copy-btn:hover, .card-copy-btn:active {
       background: linear-gradient(135deg,rgba(124,77,255,0.42),rgba(59,130,246,0.35));
       color: #fff;
@@ -382,13 +426,16 @@
 
     .like-count { font-size: 12px; color: var(--muted); margin-left: auto; }
 
-    /* ── Responsive tweaks ── */
+    /* ── Mobile tweaks ── */
     @media (max-width: 480px) {
-      .home-card { padding: 24px 16px; }
-      h1 { font-size: 22px; }
-      .card-title { font-size: 15px; }
-      .scripts-header h2 { font-size: 20px; }
-      .nav-btn { font-size: 12px; padding: 5px 11px; }
+      .home-card { padding: 20px 14px; }
+      h1 { font-size: 19px; }
+      .card-title { font-size: 14px; }
+      .scripts-header h2 { font-size: 18px; }
+      .nav-btn { font-size: 12px; padding: 5px 10px; }
+      .nav-logo-text { font-size: 11.5px; }
+      .code-block pre  { font-size: 10px; }
+      .card-code  pre  { font-size: 10px; }
     }
   </style>
 </head>
@@ -399,7 +446,20 @@
 
   <!-- Navbar -->
   <nav class="navbar">
-    <span class="nav-logo">FTAP</span>
+    <div class="nav-logo">
+      <!-- Icon -->
+      <svg class="nav-logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="url(#logoGrad)">
+        <defs>
+          <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#a78bfa"/>
+            <stop offset="100%" stop-color="#60a5fa"/>
+          </linearGradient>
+        </defs>
+        <path d="M9 10c.55 0 1-.45 1-1V7h4.14c.45 1.72 2 3 3.86 3 2.21 0 4-1.79 4-4s-1.79-4-4-4c-1.86 0-3.41 1.28-3.86 3H10V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h2v4.09L1.79 17.3a.996.996 0 0 0 0 1.41l3.5 3.5c.2.2.45.29.71.29s.51-.1.71-.29L9.92 19h4.09v2c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-6c0-.55-.45-1-1-1h-6c-.55 0-1 .45-1 1v2H9.92l-2.91-2.91V10h2Zm9-6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m-2 12h4v4h-4zM6 20.09 3.91 18 6 15.91 8.09 18zM4 4h4v4H4z"/>
+      </svg>
+      <!-- Typing text -->
+      <span class="nav-logo-text" id="navLogoText"></span>
+    </div>
     <button class="nav-btn active" id="btn-home"    onclick="showPage('home')">Home</button>
     <button class="nav-btn"        id="btn-scripts" onclick="showPage('scripts')">Scripts</button>
   </nav>
@@ -493,6 +553,43 @@ loadstring(game:HttpGet("https://ftap-com.vercel.app/api/loader"))()</pre>
   </div>
 
   <script>
+    /* ── Typing animation for nav logo ── */
+    (function () {
+      const el    = document.getElementById('navLogoText');
+      const FULL  = 'ROBLOX FTAP VELOCITY UI';
+      const TYPE_SPEED   = 70;   // ms per char typing
+      const ERASE_SPEED  = 40;   // ms per char erasing
+      const PAUSE_FULL   = 1800; // pause when fully typed
+      const PAUSE_EMPTY  = 500;  // pause before retyping
+
+      let idx = 0, erasing = false;
+
+      function tick() {
+        if (!erasing) {
+          idx++;
+          el.textContent = FULL.slice(0, idx);
+          if (idx === FULL.length) {
+            erasing = true;
+            setTimeout(tick, PAUSE_FULL);
+          } else {
+            setTimeout(tick, TYPE_SPEED);
+          }
+        } else {
+          idx--;
+          el.textContent = FULL.slice(0, idx);
+          if (idx === 0) {
+            erasing = false;
+            setTimeout(tick, PAUSE_EMPTY);
+          } else {
+            setTimeout(tick, ERASE_SPEED);
+          }
+        }
+      }
+
+      // Start after a short delay so page feels snappy
+      setTimeout(tick, 300);
+    })();
+
     /* ── Page navigation ── */
     function showPage(name) {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -591,12 +688,11 @@ loadstring(game:HttpGet("https://ftap-com.vercel.app/api/loader"))()</pre>
         });
       });
 
-      init(true); // pre-spread on load
+      init(true);
       tick();
     })();
 
     /* ── Zoom prevention & instant reset ── */
-    // Disable pinch-zoom via touch events
     document.addEventListener('gesturestart',  e => e.preventDefault(), { passive: false });
     document.addEventListener('gesturechange', e => e.preventDefault(), { passive: false });
     document.addEventListener('gestureend',    e => e.preventDefault(), { passive: false });
@@ -604,12 +700,9 @@ loadstring(game:HttpGet("https://ftap-com.vercel.app/api/loader"))()</pre>
       if (e.touches.length > 1) e.preventDefault();
     }, { passive: false });
 
-    // If device zoom somehow changes, snap back
     const VIEWPORT_META = document.querySelector('meta[name=viewport]');
     const RESET_VIEWPORT = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no';
-    function resetZoom() {
-      VIEWPORT_META.content = RESET_VIEWPORT;
-    }
+    function resetZoom() { VIEWPORT_META.content = RESET_VIEWPORT; }
     window.addEventListener('touchend', resetZoom, { passive: true });
     window.addEventListener('resize',   resetZoom, { passive: true });
   </script>
