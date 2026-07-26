@@ -45,7 +45,7 @@
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       width: 100%; height: 100%;
-      background-image: url('https://i.pinimg.com/1200x/cc/3d/2f/cc3d2fe88f97edc843fc485e50e9c066.jpg');
+      background-image: url('https://i.imgur.com/AJWAVSw.png');
       background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
@@ -296,7 +296,22 @@
     /* ══ SCRIPTS ════════════════════════════════ */
     .scripts-header { margin-bottom: 20px; }
     .scripts-header h2 { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -0.4px; margin-bottom: 4px; }
-    .scripts-header p  { font-size: 13px; color: var(--muted); }
+    .scripts-header p  { font-size: 13px; color: rgba(255,255,255,0.38); margin-bottom: 8px; }
+    .scripts-discord {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #a5b4fc;
+      text-decoration: none;
+      padding: 4px 10px;
+      border: 1px solid rgba(124,77,255,0.35);
+      border-radius: 6px;
+      background: rgba(124,77,255,0.1);
+      transition: all 0.16s;
+    }
+    .scripts-discord:hover { background: rgba(124,77,255,0.22); color: #fff; }
 
     .scripts-grid {
       display: grid;
@@ -341,7 +356,19 @@
       display: inline-block;
       margin-bottom: 4px;
     }
-    .card-title { font-size: 15px; font-weight: 800; color: #fff; }
+    /* Card title row: icon + text */
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .card-title-icon {
+      flex-shrink: 0;
+      width: 15px;
+      height: 15px;
+      opacity: 0.85;
+    }
+    .card-title { font-size: 17px; font-weight: 800; color: #fff; }
 
     /* Game image — top-right corner, landscape */
     .card-game-img {
@@ -538,6 +565,9 @@ console.log(checkPassword(<span class="str">"abc1234"</span>));
       <div class="scripts-header">
         <h2>Scripts</h2>
         <p>Browse and copy available scripts. Tap ♥ to like.</p>
+        <a class="scripts-discord" href="https://discord.gg/C2NbPMdmXG" target="_blank" rel="noopener">
+          <i class='bx bxl-discord-alt'></i> Join our Discord
+        </a>
       </div>
 
       <div class="scripts-grid">
@@ -547,7 +577,18 @@ console.log(checkPassword(<span class="str">"abc1234"</span>));
           <div class="card-header">
             <div class="card-header-left">
               <div class="card-tag">Loader</div>
-              <div class="card-title">FTAP Velocity Hub</div>
+              <div class="card-title-row">
+                <svg class="card-title-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="url(#velGrad)">
+                  <defs>
+                    <linearGradient id="velGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#a78bfa"/>
+                      <stop offset="100%" stop-color="#60a5fa"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M2 22h2c0-9.93 8.07-18 18-18V2C10.97 2 2 10.97 2 22"/><path d="M6 22h2c0-7.72 6.28-14 14-14V6C13.18 6 6 13.18 6 22"/><path d="M10 22h2c0-5.51 4.49-10 10-10v-2c-6.62 0-12 5.38-12 12"/><path d="M14 22h2c0-3.31 2.69-6 6-6v-2c-4.41 0-8 3.59-8 8"/><path d="M18 22h2c0-1.1.9-2 2-2v-2c-2.21 0-4 1.79-4 4"/>
+                </svg>
+                <div class="card-title">FTAP Velocity Hub</div>
+              </div>
             </div>
             <img
               class="card-game-img"
@@ -582,7 +623,18 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
           <div class="card-header">
             <div class="card-header-left">
               <div class="card-tag">Loader</div>
-              <div class="card-title">FTAP Silent Aim Hub</div>
+              <div class="card-title-row">
+                <svg class="card-title-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="url(#aimGrad)">
+                  <defs>
+                    <linearGradient id="aimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#f472b6"/>
+                      <stop offset="100%" stop-color="#a78bfa"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M9 2h2v3H9zM2 9h3v2H2zm18.37 4.93c.38-.15.63-.52.63-.92s-.24-.77-.62-.93l-12-5a.98.98 0 0 0-1.09.22c-.29.29-.37.72-.22 1.09l5 12c.16.37.52.62.92.62.41 0 .77-.25.92-.63l1.44-3.59 4.93 4.93 1.41-1.41-4.93-4.93 3.59-1.44Zm-6.3.7-1.09 2.73-3.12-7.5 7.5 3.12-2.73 1.09c-.25.1-.46.3-.56.56M3.96 2.54l-.71.71-.71.71 1.25 1.25 1.25 1.25.71-.71.71-.71-1.25-1.25z"/>
+                </svg>
+                <div class="card-title">FTAP Silent Aim Hub</div>
+              </div>
             </div>
             <img
               class="card-game-img"
@@ -600,7 +652,7 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
             <button class="card-copy-btn" id="copy-1" onclick="cardCopy(1)">
               <i class='bx bx-copy'></i> Copy
             </button>
-            <span class="card-author">化 / center</span>
+            <span class="card-author">化</span>
             <button class="like-btn" id="like-1" onclick="toggleLike(1)">
               <i class='bx bx-heart'></i>
               <i class='bx bxs-heart'></i>
