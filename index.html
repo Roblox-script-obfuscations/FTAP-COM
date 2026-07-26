@@ -577,6 +577,38 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
           </div>
         </div>
 
+        <!-- Card 2 -->
+        <div class="script-card">
+          <div class="card-header">
+            <div class="card-header-left">
+              <div class="card-tag">Loader</div>
+              <div class="card-title">FTAP Silent Aim Hub</div>
+            </div>
+            <img
+              class="card-game-img"
+              src="https://tr.rbxcdn.com/180DAY-b70bb4ef0254df8f81e4c78cee088a12/500/280/Image/Jpeg/noFilter"
+              alt="Game"
+              loading="lazy"
+            >
+          </div>
+
+          <div class="card-code">
+            <pre><span class="fn">loadstring</span>(<span class="fn">game:HttpGet</span>(<span class="str">"https://pastebin.com/raw/7KVCC5sx"</span>))()</pre>
+          </div>
+
+          <div class="card-actions">
+            <button class="card-copy-btn" id="copy-1" onclick="cardCopy(1)">
+              <i class='bx bx-copy'></i> Copy
+            </button>
+            <span class="card-author">化 / center</span>
+            <button class="like-btn" id="like-1" onclick="toggleLike(1)">
+              <i class='bx bx-heart'></i>
+              <i class='bx bxs-heart'></i>
+              <span id="like-num-1"></span>
+            </button>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -642,6 +674,7 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
     /* ── Card copy ── */
     const CARD_TEXTS = [
       '--[[ The game operators monitor for in-game hacks, and you risk being kicked. Please take care to use them safely.\nWe encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]\nloadstring(game:HttpGet("https://ftap-com.vercel.app/api/loader"))()',
+      'loadstring(game:HttpGet("https://pastebin.com/raw/7KVCC5sx"))()',
     ];
 
     function cardCopy(id) {
@@ -654,9 +687,10 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
     }
 
     /* ── Like system (weekly auto-increment: +1 per week from ref date) ── */
-    // Ref: Jul 26 2020 base=1043 → Jul 26 2026 ≈ 313 weeks → ~1356 likes
+    // Ref: Jul 26 2020 → Jul 26 2026 ≈ 313 weeks
+    // Card 0: 1043+313=1356 | Card 1: 9107+313=9420
     const LIKE_REF_DATE  = new Date('2020-07-26T00:00:00Z').getTime();
-    const LIKE_BASE      = [1043]; // base count at ref date, per card
+    const LIKE_BASE      = [1043, 9107]; // base count at ref date, per card
 
     function weeklyCount(id) {
       const weeks = Math.floor((Date.now() - LIKE_REF_DATE) / (7 * 24 * 60 * 60 * 1000));
