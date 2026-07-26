@@ -1,10 +1,17 @@
-export default function handler(req, res) {
+export default async function handler(req, res) {
   const accept = req.headers['accept'] || '';
   if (accept.includes('text/html')) {
     res.setHeader('Location', '/');
     return res.status(302).end();
   }
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Content-Type', 'text/plain');
-  res.status(200).send('loadstring(game:HttpGet("https://raw.githubusercontent.com/Roblox-script-obfuscations/ftap/refs/heads/main/dontlook.lua"))()');
+
+  try {
+    const r = await fetch('https://pastefy.app/Brv49k3M/raw');
+    const text = await r.text();
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Content-Type', 'text/plain');
+    res.status(200).send(text);
+  } catch (e) {
+    res.status(500).send('error');
+  }
 }
