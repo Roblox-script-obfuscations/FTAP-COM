@@ -1,5 +1,1 @@
-{
-  "rewrites": [
-    { "source": "/v2/loader", "destination": "/api/loader" }
-  ]
-}
+{}
