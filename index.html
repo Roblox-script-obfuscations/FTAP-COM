@@ -343,15 +343,19 @@
     }
     .card-title { font-size: 15px; font-weight: 800; color: #fff; }
 
-    /* Game image — top-right corner */
+    /* Game image — top-right corner, landscape */
     .card-game-img {
-      width: 64px;
-      height: 64px;
-      border-radius: 10px;
+      width: 130px;
+      height: 74px;
+      border-radius: 8px;
       object-fit: cover;
+      object-position: center;
       flex-shrink: 0;
       border: 1px solid rgba(255,255,255,0.1);
       box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+    }
+    @media (max-width: 480px) {
+      .card-game-img { width: 100px; height: 57px; }
     }
 
     /* Card code */
