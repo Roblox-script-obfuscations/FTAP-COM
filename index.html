@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roblox External Loader API</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #0a0a0f;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-image: 
+        radial-gradient(ellipse at 20% 50%, rgba(80, 40, 200, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(0, 180, 255, 0.08) 0%, transparent 40%);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 720px;
+      background: rgba(18, 18, 28, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 40px 36px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(12px);
+    }
+
+    .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #6c3ce1, #3b82f6);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 18px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      color: #888;
+      font-size: 14px;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    .endpoint {
+      background: #0d0d14;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .method {
+      display: inline-block;
+      background: #22c55e;
+      color: #000;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+
+    .url {
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 14px;
+      color: #a5b4fc;
+    }
+
+    .code-block {
+      background: #0d0d14;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 10px;
+      padding: 20px;
+      overflow-x: auto;
+      margin-bottom: 24px;
+    }
+
+    .code-block pre {
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #c4b5fd;
+      white-space: pre;
+    }
+
+    .code-block .comment {
+      color: #6b7280;
+    }
+
+    .code-block .key {
+      color: #f472b6;
+    }
+
+    .code-block .string {
+      color: #86efac;
+    }
+
+    .code-block .fn {
+      color: #60a5fa;
+    }
+
+    .code-block .keyword {
+      color: #f472b6;
+    }
+
+    .overview {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      padding: 20px 22px;
+    }
+
+    .overview h3 {
+      font-size: 13px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .overview p {
+      font-size: 14px;
+      line-height: 1.65;
+      color: #ccc;
+    }
+
+    .footer {
+      margin-top: 28px;
+      text-align: center;
+      font-size: 12px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="badge">API v2.4</div>
+    <h1>Roblox External Loader</h1>
+    <p class="subtitle">Fetch the latest external loader script via API.<br>Just hit the endpoint and get the script back.</p>
+
+    <div class="endpoint">
+      <span class="method">GET</span>
+      <span class="url">https://ftap-com.vercel.app/v2/loader</span>
+    </div>
+
+    <div class="code-block">
+      <pre><span class="fn">function</span> <span class="key">checkPassword</span>(password) {
+    <span class="keyword">if</span> (password.length &lt; 8) {
+        <span class="keyword">return</span> <span class="string">"Too short. Are you even trying?"</span>;
+    } <span class="keyword">else if</span> (!/[A-Z]/.test(password)) {
+        <span class="keyword">return</span> <span class="string">"No uppercase letters. What, are you best friends with a hacker?"</span>;
+    } <span class="keyword">else if</span> (!/[0-9]/.test(password)) {
+        <span class="keyword">return</span> <span class="string">"Add some numbers. Everyone already knows your birthday anyway."</span>;
+    } <span class="keyword">else</span> {
+        <span class="keyword">return</span> <span class="string">"Fine, I'll let it slide, but your taste in passwords is tragic."</span>;
+    }
+}
+
+<span class="comment">// Example Execution</span>
+console.log(checkPassword(<span class="string">"abc1234"</span>)); 
+<span class="comment">// Output: No uppercase letters. What, are you best friends with a hacker?</span></pre>
+    </div>
+
+    <div class="overview">
+      <h3>Script Overview</h3>
+      <p>Yeah… there’s really nothing useful here.<br>
+      You’re looking at this page for no reason. Go touch grass or something lol.</p>
+    </div>
+
+    <div class="footer">
+      External Loader API · For educational purposes only
+    </div>
+  </div>
+</body>
+</html>
