@@ -957,6 +957,81 @@
       .sg-detail-title { font-size: 16px; }
       .sg-detail-card { padding: 14px 14px 18px; }
     }
+
+    /* ── Detail: author row ── */
+    .sg-detail-author {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.38);
+      margin-bottom: 14px;
+    }
+    .sg-detail-author i { font-size: 14px; color: rgba(255,255,255,0.28); }
+    .sg-detail-author b { color: rgba(255,255,255,0.65); font-weight: 600; }
+
+    /* ── Detail: description block ── */
+    .sg-detail-desc-block {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+    .sg-detail-desc-block h4 {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.28);
+      margin-bottom: 7px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .sg-detail-desc-block h4 i { font-size: 12px; }
+    .sg-detail-desc-block p {
+      font-size: 12px;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.55);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* ── Detail: hero image fill fix for mobile ── */
+    .sg-detail-hero-wrap {
+      position: relative;
+      width: 100%;
+      border-radius: 14px 14px 0 0;
+      overflow: hidden;
+      background: rgba(8,6,22,0.9);
+    }
+    .sg-detail-hero-wrap img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    @media (max-width: 480px) {
+      .sg-detail-hero-wrap img { height: 160px; }
+    }
+    .sg-detail-hero-views {
+      position: absolute;
+      bottom: 8px;
+      left: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(6px);
+      border-radius: 20px;
+      padding: 3px 9px;
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.85);
+    }
+    .sg-detail-hero-views i { font-size: 13px; }
   </style>
 </head>
 <body>
@@ -1194,28 +1269,62 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
         <button class="sg-back-btn" onclick="sgCloseDetail()">
           <i class='bx bx-arrow-back'></i> 検索結果に戻る
         </button>
-        <img class="sg-detail-hero" id="sgDetailHero" src="" alt=""
-             onerror="this.src='https://scriptblox.com/images/no-script.webp'">
+
+        <!-- Hero image with views overlay -->
+        <div class="sg-detail-hero-wrap">
+          <img id="sgDetailHero" src="" alt=""
+               onerror="this.src='https://scriptblox.com/images/no-script.webp'">
+          <div class="sg-detail-hero-views" id="sgDetailHeroViews">
+            <i class='bx bx-show'></i> <span id="sgDetailViewsNum"></span>
+          </div>
+        </div>
+
         <div class="sg-detail-card">
+          <!-- Badges -->
           <div class="sg-detail-badges" id="sgDetailBadges"></div>
-          <div class="sg-detail-title"  id="sgDetailTitle"></div>
-          <div class="sg-detail-game"   id="sgDetailGame"></div>
-          <div class="sg-detail-stats"  id="sgDetailStats"></div>
+
+          <!-- Title -->
+          <div class="sg-detail-title" id="sgDetailTitle"></div>
+
+          <!-- Game name -->
+          <div class="sg-detail-game" id="sgDetailGame"></div>
+
+          <!-- Author -->
+          <div class="sg-detail-author" id="sgDetailAuthor"></div>
+
+          <!-- Stats bar -->
+          <div class="sg-detail-stats" id="sgDetailStats"></div>
+
+          <!-- Description (shown only if available) -->
+          <div class="sg-detail-desc-block" id="sgDetailDescBlock" style="display:none">
+            <h4><i class='bx bx-info-circle'></i> Description</h4>
+            <p id="sgDetailDesc"></p>
+          </div>
+
+          <!-- Script label -->
           <div class="sg-detail-code-label">
             <i class='bx bx-code-curly'></i> SCRIPT
           </div>
+
+          <!-- Script code -->
           <div class="sg-detail-code">
             <pre id="sgDetailScript"></pre>
           </div>
+
+          <!-- Copy button -->
           <button class="sg-detail-copy-btn" id="sgDetailCopyBtn" onclick="sgDetailCopy()">
             <i class='bx bx-copy'></i> スクリプトをコピー
           </button>
-          <div id="sgDetailKeyWarn"     class="sg-detail-warn sg-detail-warn-key"     style="display:none">
+
+          <!-- Warnings -->
+          <div id="sgDetailKeyWarn" class="sg-detail-warn sg-detail-warn-key" style="display:none">
             <i class='bx bx-key'></i> このスクリプトは実行にキーが必要です。
           </div>
           <div id="sgDetailPatchedWarn" class="sg-detail-warn sg-detail-warn-patched" style="display:none">
             <i class='bx bx-error-circle'></i> このスクリプトはパッチ済みの可能性があります。
           </div>
+
+          <!-- Footer -->
           <div class="sg-detail-footer">
             <span id="sgDetailDate"></span>
             <a id="sgDetailLink" href="#" target="_blank" rel="noopener">
@@ -1307,8 +1416,10 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
       return 'https://scriptblox.com' + url;
     }
 
-    /* Format numbers */
+    /* Format numbers — handles null/undefined safely */
     function sgFmt(n) {
+      if (n == null || isNaN(Number(n))) return '0';
+      n = Number(n);
       if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
       if (n >= 1000)    return (n / 1000).toFixed(1) + 'K';
       return String(n);
@@ -1500,18 +1611,16 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
       document.getElementById('section-scriptget').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    /* Open detail card (ScriptBlox-style inline view) */
-    function sgOpenDetail(idx) {
-      const filtered = sgApplyFilters(SG.results);
-      const s = filtered[idx];
-      if (!s) return;
+    /* Populate detail view from a script object */
+    function sgPopulateDetail(s) {
       SG.currentScript = s;
 
       /* Hero image */
       const img = sgImg(s.image || (s.game && s.game.imageUrl));
       document.getElementById('sgDetailHero').src = img;
+      document.getElementById('sgDetailViewsNum').textContent = sgFmt(s.views);
 
-      /* Badges (boxicons only) */
+      /* Badges */
       const badges = [
         s.verified
           ? `<span class="sg-badge sg-badge-verified"><i class='bx bx-badge-check'></i> Verified</span>`
@@ -1526,19 +1635,39 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
       ].filter(Boolean).join('');
       document.getElementById('sgDetailBadges').innerHTML = badges;
 
-      /* Title & game */
+      /* Title */
       document.getElementById('sgDetailTitle').textContent = s.title;
+
+      /* Game name */
       const gameName = (s.game && s.game.name) || '';
       document.getElementById('sgDetailGame').innerHTML = gameName
         ? `<i class='bx bx-joystick'></i>${gameName}` : '';
 
-      /* Stats grid */
+      /* Author */
+      const authorEl = document.getElementById('sgDetailAuthor');
+      const authorName = (s.owner && s.owner.username)
+                      || (s.user  && s.user.username)
+                      || '';
+      authorEl.innerHTML = authorName
+        ? `<i class='bx bx-user-circle'></i> Uploaded by <b>${authorName}</b>` : '';
+
+      /* Stats bar */
       document.getElementById('sgDetailStats').innerHTML = `
-        <div class="sg-dstat"><i class='bx bx-show'></i><b>${s.views.toLocaleString()}</b><span>Views</span></div>
-        <div class="sg-dstat"><i class='bx bx-heart'></i><b>${s.likeCount.toLocaleString()}</b><span>Likes</span></div>
-        <div class="sg-dstat"><i class='bx bx-dislike'></i><b>${s.dislikeCount.toLocaleString()}</b><span>Dislikes</span></div>
+        <div class="sg-dstat"><i class='bx bx-show'></i><b>${(s.views||0).toLocaleString()}</b><span>Views</span></div>
+        <div class="sg-dstat"><i class='bx bx-heart'></i><b>${(s.likeCount||0).toLocaleString()}</b><span>Likes</span></div>
+        <div class="sg-dstat"><i class='bx bx-dislike'></i><b>${(s.dislikeCount||0).toLocaleString()}</b><span>Dislikes</span></div>
         <div class="sg-dstat"><i class='bx bx-time-five'></i><b>${sgRelTime(s.lastBump)}</b><span>更新</span></div>
       `;
+
+      /* Description */
+      const desc = s.desc || s.description || '';
+      const descBlock = document.getElementById('sgDetailDescBlock');
+      if (desc) {
+        document.getElementById('sgDetailDesc').textContent = desc;
+        descBlock.style.display = 'block';
+      } else {
+        descBlock.style.display = 'none';
+      }
 
       /* Script code */
       document.getElementById('sgDetailScript').textContent = s.script || '-- スクリプトが見つかりませんでした';
@@ -1555,12 +1684,33 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
       /* Footer */
       document.getElementById('sgDetailDate').textContent = `投稿 ${sgDate(s.createdAt)} · 更新 ${sgDate(s.lastBump)}`;
       document.getElementById('sgDetailLink').href = `https://scriptblox.com/script/${s.slug}`;
+    }
 
-      /* Swap views */
+    /* Open detail card — show immediately then fetch full data */
+    async function sgOpenDetail(idx) {
+      const filtered = sgApplyFilters(SG.results);
+      const s = filtered[idx];
+      if (!s) return;
+
+      /* Show with data we already have */
+      sgPopulateDetail(s);
       document.getElementById('sg-search-view').style.display = 'none';
       document.getElementById('sgFilters').style.display      = 'none';
       document.getElementById('sg-detail-view').style.display = 'block';
       document.getElementById('section-scriptget').scrollIntoView({ block: 'start' });
+
+      /* Fetch full details (description, author etc.) from individual endpoint */
+      if (s.slug) {
+        try {
+          const res  = await fetch(`/api/getscript?slug=${encodeURIComponent(s.slug)}`);
+          const data = await res.json();
+          /* ScriptBlox returns { script: {...} } */
+          const full = data.script || data;
+          if (full && full.title) {
+            sgPopulateDetail({ ...s, ...full });
+          }
+        } catch(e) { /* silently keep existing data */ }
+      }
     }
 
     /* Close detail card — back to search results */
