@@ -488,6 +488,447 @@
       .code-block pre  { font-size: 10px; }
       .card-code  pre  { font-size: 10px; }
     }
+
+    /* ══ SCRIPT GET ════════════════════════════ */
+
+    /* ── Search bar ── */
+    .sg-header { margin-bottom: 18px; }
+    .sg-header h2 { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -0.4px; margin-bottom: 4px; }
+    .sg-header p  { font-size: 13px; color: rgba(255,255,255,0.38); }
+
+    .sg-search-wrap {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .sg-input {
+      flex: 1;
+      background: rgba(12,12,26,0.82);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 11px 14px;
+      color: #fff;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s;
+      -webkit-appearance: none;
+    }
+    .sg-input::placeholder { color: rgba(255,255,255,0.28); }
+    .sg-input:focus {
+      border-color: rgba(124,77,255,0.6);
+      box-shadow: 0 0 0 3px rgba(124,77,255,0.14);
+    }
+    .sg-search-btn {
+      background: linear-gradient(135deg,#7c4dff,#3b82f6);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 11px 18px;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sg-search-btn:hover { opacity: 0.88; }
+    .sg-search-btn i { font-size: 16px; }
+
+    /* ── Advanced filters ── */
+    .sg-filters {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .sg-filter-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-right: 2px;
+    }
+    .sg-pill {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      color: rgba(255,255,255,0.5);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 11px;
+      cursor: pointer;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sg-pill:hover { background: rgba(124,77,255,0.15); color: #a5b4fc; border-color: rgba(124,77,255,0.3); }
+    .sg-pill.active { background: rgba(124,77,255,0.22); border-color: rgba(124,77,255,0.5); color: #c4b5fd; }
+    .sg-pill.active-green { background: rgba(34,197,94,0.15); border-color: rgba(34,197,94,0.4); color: #4ade80; }
+    .sg-pill.active-red   { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.4); color: #f87171; }
+
+    /* ── Status bar (showing X results) ── */
+    .sg-status {
+      font-size: 11px;
+      color: rgba(255,255,255,0.28);
+      margin: 12px 0 8px;
+      min-height: 16px;
+    }
+    .sg-status span { color: rgba(255,255,255,0.5); font-weight: 600; }
+
+    /* ── Results grid ── */
+    .sg-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    /* ── Result card ── */
+    .sg-card {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      padding: 13px 14px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: flex;
+      gap: 12px;
+      cursor: pointer;
+      transition: border-color 0.18s, background 0.18s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sg-card:hover { border-color: rgba(124,77,255,0.35); background: rgba(20,18,40,0.88); }
+
+    .sg-card-thumb {
+      width: 84px;
+      height: 48px;
+      border-radius: 7px;
+      object-fit: cover;
+      object-position: center;
+      flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(12,12,26,0.8);
+    }
+    @media (max-width: 420px) {
+      .sg-card-thumb { width: 68px; height: 38px; }
+    }
+
+    .sg-card-info {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .sg-card-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 1px;
+    }
+    .sg-badge {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .sg-badge-verified { background: rgba(59,130,246,0.18); border: 1px solid rgba(59,130,246,0.35); color: #60a5fa; }
+    .sg-badge-unverified { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.35); }
+    .sg-badge-free    { background: rgba(34,197,94,0.14); border: 1px solid rgba(34,197,94,0.3); color: #4ade80; }
+    .sg-badge-paid    { background: rgba(234,179,8,0.14); border: 1px solid rgba(234,179,8,0.3); color: #facc15; }
+    .sg-badge-key     { background: rgba(251,146,60,0.14); border: 1px solid rgba(251,146,60,0.3); color: #fb923c; }
+    .sg-badge-patched { background: rgba(239,68,68,0.14); border: 1px solid rgba(239,68,68,0.3); color: #f87171; }
+    .sg-badge-univ    { background: rgba(168,85,247,0.14); border: 1px solid rgba(168,85,247,0.3); color: #c084fc; }
+    .sg-badge-hub     { background: rgba(236,72,153,0.14); border: 1px solid rgba(236,72,153,0.3); color: #f472b6; }
+
+    .sg-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.3;
+    }
+    .sg-card-game {
+      font-size: 11px;
+      color: rgba(255,255,255,0.38);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sg-card-stats {
+      display: flex;
+      gap: 10px;
+      margin-top: 2px;
+    }
+    .sg-stat {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 10px;
+      color: rgba(255,255,255,0.32);
+    }
+    .sg-stat i { font-size: 11px; }
+
+    /* ── Pagination ── */
+    .sg-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .sg-page-btn {
+      background: rgba(12,12,26,0.8);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: rgba(255,255,255,0.55);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .sg-page-btn:hover:not(:disabled) { background: rgba(124,77,255,0.2); border-color: rgba(124,77,255,0.4); color: #fff; }
+    .sg-page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .sg-page-info {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      white-space: nowrap;
+    }
+    .sg-page-info b { color: rgba(255,255,255,0.7); }
+
+    /* ── Empty / loading states ── */
+    .sg-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: rgba(255,255,255,0.25);
+      font-size: 13px;
+    }
+    .sg-state i { font-size: 36px; display: block; margin-bottom: 10px; }
+    .sg-state.loading i { animation: sgSpin 0.8s linear infinite; }
+    @keyframes sgSpin { to { transform: rotate(360deg); } }
+    .sg-state p { line-height: 1.6; }
+
+    /* ── Modal overlay ── */
+    .sg-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(4,2,18,0.88);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 60px 12px 20px;
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .sg-modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .sg-modal {
+      background: rgba(10,8,28,0.95);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 680px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.7);
+      overflow: hidden;
+      transform: translateY(12px);
+      transition: transform 0.22s;
+      position: relative;
+    }
+    .sg-modal-overlay.open .sg-modal { transform: translateY(0); }
+
+    .sg-modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      color: rgba(255,255,255,0.6);
+      font-size: 18px;
+      width: 34px;
+      height: 34px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      z-index: 2;
+    }
+    .sg-modal-close:hover { background: rgba(239,68,68,0.2); border-color: rgba(239,68,68,0.4); color: #f87171; }
+
+    .sg-modal-hero {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      background: rgba(12,12,26,0.8);
+    }
+    @media (max-width: 480px) { .sg-modal-hero { height: 120px; } }
+
+    .sg-modal-body {
+      padding: 18px 18px 22px;
+    }
+
+    .sg-modal-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+
+    .sg-modal-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .sg-modal-game {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 12px;
+    }
+
+    .sg-modal-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 14px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+    }
+    .sg-mstat {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.45);
+    }
+    .sg-mstat i { font-size: 14px; }
+    .sg-mstat b { color: rgba(255,255,255,0.75); font-weight: 700; }
+
+    .sg-modal-code-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 6px;
+    }
+    .sg-modal-code {
+      background: rgba(4,4,14,0.9);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 13px;
+      overflow-x: auto;
+      overflow-y: auto;
+      max-height: 180px;
+      margin-bottom: 12px;
+      transform: translateZ(0);
+    }
+    .sg-modal-code pre {
+      font-family: 'Consolas','Monaco',monospace;
+      font-size: 11.5px;
+      line-height: 1.65;
+      color: #c4b5fd;
+      white-space: pre;
+      width: max-content;
+      min-width: 100%;
+      -webkit-text-size-adjust: none;
+      text-size-adjust: none;
+    }
+    .sg-modal-code::-webkit-scrollbar { width: 4px; height: 4px; }
+    .sg-modal-code::-webkit-scrollbar-track { background: transparent; }
+    .sg-modal-code::-webkit-scrollbar-thumb { background: rgba(124,77,255,0.4); border-radius: 4px; }
+
+    .sg-modal-copy-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      width: 100%;
+      background: linear-gradient(135deg,rgba(124,77,255,0.25),rgba(59,130,246,0.22));
+      border: 1px solid rgba(124,77,255,0.4);
+      border-radius: 10px;
+      color: #a5b4fc;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      font-family: inherit;
+    }
+    .sg-modal-copy-btn i { font-size: 16px; }
+    .sg-modal-copy-btn:hover { background: linear-gradient(135deg,rgba(124,77,255,0.42),rgba(59,130,246,0.38)); color: #fff; }
+    .sg-modal-copy-btn.copied { background: rgba(34,197,94,0.18); border-color: rgba(34,197,94,0.45); color: #4ade80; }
+
+    .sg-modal-key-warn {
+      margin-top: 10px;
+      background: rgba(251,146,60,0.1);
+      border: 1px solid rgba(251,146,60,0.25);
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 11.5px;
+      color: rgba(251,146,60,0.8);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .sg-modal-key-warn i { font-size: 14px; flex-shrink: 0; }
+    .sg-modal-patched-warn {
+      margin-top: 10px;
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 11.5px;
+      color: rgba(239,68,68,0.8);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .sg-modal-patched-warn i { font-size: 14px; flex-shrink: 0; }
+
+    .sg-modal-date {
+      margin-top: 12px;
+      font-size: 10.5px;
+      color: rgba(255,255,255,0.22);
+      text-align: right;
+    }
+
+    @media (max-width: 480px) {
+      .sg-modal-title { font-size: 15px; }
+      .sg-modal-body { padding: 14px 14px 18px; }
+      .sg-modal-overlay { padding: 52px 8px 16px; }
+    }
   </style>
 </head>
 <body>
@@ -511,8 +952,9 @@
       <!-- Typing text -->
       <span class="nav-logo-text" id="navLogoText"></span>
     </div>
-    <button class="nav-btn active" id="btn-home"    onclick="showPage('home')">Home</button>
-    <button class="nav-btn"        id="btn-scripts" onclick="showPage('scripts')">Scripts</button>
+    <button class="nav-btn active" id="btn-home"      onclick="showPage('home')">Home</button>
+    <button class="nav-btn"        id="btn-scripts"   onclick="showPage('scripts')">Scripts</button>
+    <button class="nav-btn"        id="btn-scriptget" onclick="showPage('scriptget')">Script Get</button>
   </nav>
 
   <div class="page-wrapper">
@@ -664,6 +1106,84 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
       </div>
     </section>
 
+    <!-- ── SCRIPT GET ── -->
+    <section class="section" id="section-scriptget">
+      <div class="sg-header">
+        <h2>Script Get</h2>
+        <p>ScriptBlox のスクリプトをリアルタイム検索</p>
+      </div>
+
+      <div class="sg-search-wrap">
+        <input
+          class="sg-input"
+          id="sgInput"
+          type="text"
+          placeholder="ゲーム名やスクリプト名を検索..."
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+        >
+        <button class="sg-search-btn" onclick="sgSearch()">
+          <i class='bx bx-search'></i> 検索
+        </button>
+      </div>
+
+      <!-- Advanced filters -->
+      <div class="sg-filters" id="sgFilters">
+        <span class="sg-filter-label">絞り込み</span>
+        <button class="sg-pill" id="pill-verified"  onclick="sgTogglePill('verified')">✓ Verified</button>
+        <button class="sg-pill" id="pill-free"      onclick="sgTogglePill('free')">Free</button>
+        <button class="sg-pill" id="pill-nokey"     onclick="sgTogglePill('nokey')">🔓 No Key</button>
+        <button class="sg-pill" id="pill-universal" onclick="sgTogglePill('universal')">🌐 Universal</button>
+        <button class="sg-pill" id="pill-nopatched" onclick="sgTogglePill('nopatched')">✅ Not Patched</button>
+      </div>
+
+      <div class="sg-status" id="sgStatus"></div>
+
+      <div class="sg-grid" id="sgGrid">
+        <!-- results injected here -->
+        <div class="sg-state" id="sgEmptyState">
+          <i class='bx bx-search-alt'></i>
+          <p>キーワードを入力してスクリプトを検索しましょう。<br>Enterキーまたは検索ボタンで開始します。</p>
+        </div>
+      </div>
+
+      <div class="sg-pagination" id="sgPagination" style="display:none">
+        <button class="sg-page-btn" id="sgPrev" onclick="sgChangePage(-1)">
+          <i class='bx bx-chevron-left'></i> 前へ
+        </button>
+        <span class="sg-page-info" id="sgPageInfo"></span>
+        <button class="sg-page-btn" id="sgNext" onclick="sgChangePage(1)">
+          次へ <i class='bx bx-chevron-right'></i>
+        </button>
+      </div>
+    </section>
+
+  </div><!-- end page-wrapper -->
+
+  <!-- ── Script Get Modal ── -->
+  <div class="sg-modal-overlay" id="sgModalOverlay" onclick="sgCloseModal(event)">
+    <div class="sg-modal" id="sgModal">
+      <button class="sg-modal-close" onclick="sgCloseModalDirect()"><i class='bx bx-x'></i></button>
+      <img class="sg-modal-hero" id="sgModalHero" src="" alt="">
+      <div class="sg-modal-body">
+        <div class="sg-modal-badges" id="sgModalBadges"></div>
+        <div class="sg-modal-title" id="sgModalTitle"></div>
+        <div class="sg-modal-game"  id="sgModalGame"></div>
+        <div class="sg-modal-stats" id="sgModalStats"></div>
+        <div class="sg-modal-code-label">SCRIPT</div>
+        <div class="sg-modal-code">
+          <pre id="sgModalScript"></pre>
+        </div>
+        <button class="sg-modal-copy-btn" id="sgModalCopyBtn" onclick="sgModalCopy()">
+          <i class='bx bx-copy'></i> スクリプトをコピー
+        </button>
+        <div id="sgModalKeyWarn"     class="sg-modal-key-warn"     style="display:none"><i class='bx bx-key'></i> このスクリプトは実行にキーが必要です。</div>
+        <div id="sgModalPatchedWarn" class="sg-modal-patched-warn" style="display:none"><i class='bx bx-x-circle'></i> このスクリプトはパッチ済みの可能性があります。</div>
+        <div class="sg-modal-date" id="sgModalDate"></div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -711,6 +1231,277 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
       document.getElementById('section-' + name).classList.add('active');
       document.getElementById('btn-' + name).classList.add('active');
     }
+
+    /* ══════════════════════════════════════════
+       SCRIPT GET — ScriptBlox API integration
+    ══════════════════════════════════════════ */
+
+    const SG = {
+      query:       '',
+      page:        1,
+      totalPages:  1,
+      results:     [],
+      filters:     { verified: false, free: false, nokey: false, universal: false, nopatched: false },
+      loading:     false,
+      currentScript: null,
+    };
+
+    /* CORS proxy — ScriptBlox blocks direct browser requests */
+    function sgApiUrl(q, page, max) {
+      const base = `https://scriptblox.com/api/script/search?q=${encodeURIComponent(q)}&max=${max}&page=${page}`;
+      return `https://api.allorigins.win/raw?url=${encodeURIComponent(base)}`;
+    }
+
+    /* Image URL normalizer */
+    function sgImg(url) {
+      if (!url) return 'https://scriptblox.com/images/no-script.webp';
+      if (url.startsWith('http')) return url;
+      return 'https://scriptblox.com' + url;
+    }
+
+    /* Format numbers */
+    function sgFmt(n) {
+      if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+      if (n >= 1000)    return (n / 1000).toFixed(1) + 'K';
+      return String(n);
+    }
+
+    /* Format date */
+    function sgDate(iso) {
+      const d = new Date(iso);
+      return d.toLocaleDateString('ja-JP', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    /* Relative time */
+    function sgRelTime(iso) {
+      const diff = Date.now() - new Date(iso).getTime();
+      const m = Math.floor(diff / 60000);
+      if (m < 60)    return m + '分前';
+      const h = Math.floor(m / 60);
+      if (h < 24)    return h + '時間前';
+      const day = Math.floor(h / 24);
+      if (day < 30)  return day + '日前';
+      const mo = Math.floor(day / 30);
+      if (mo < 12)   return mo + 'ヶ月前';
+      return Math.floor(mo / 12) + '年前';
+    }
+
+    /* Toggle filter pill */
+    function sgTogglePill(key) {
+      SG.filters[key] = !SG.filters[key];
+      const btn = document.getElementById('pill-' + key);
+      btn.classList.toggle('active', SG.filters[key]);
+      // Re-render with current results applying new filters
+      if (SG.results.length) sgRender(SG.results, SG.page, SG.totalPages);
+    }
+
+    /* Apply client-side filters */
+    function sgApplyFilters(scripts) {
+      return scripts.filter(s => {
+        if (SG.filters.verified  && !s.verified)   return false;
+        if (SG.filters.free      && s.scriptType !== 'free') return false;
+        if (SG.filters.nokey     && s.key)          return false;
+        if (SG.filters.universal && !s.isUniversal) return false;
+        if (SG.filters.nopatched && s.isPatched)    return false;
+        return true;
+      });
+    }
+
+    /* Main search trigger */
+    function sgSearch(resetPage) {
+      const q = document.getElementById('sgInput').value.trim();
+      if (!q) return;
+      SG.query = q;
+      if (resetPage !== false) SG.page = 1;
+      sgFetch();
+    }
+
+    /* Fetch from API */
+    async function sgFetch() {
+      if (SG.loading) return;
+      SG.loading = true;
+
+      const grid   = document.getElementById('sgGrid');
+      const status = document.getElementById('sgStatus');
+      const pag    = document.getElementById('sgPagination');
+
+      grid.innerHTML = `<div class="sg-state loading"><i class='bx bx-loader-alt'></i><p>検索中...</p></div>`;
+      status.textContent = '';
+      pag.style.display = 'none';
+
+      try {
+        const res  = await fetch(sgApiUrl(SG.query, SG.page, 20));
+        const data = await res.json();
+        const r    = data.result;
+
+        if (!r || !r.scripts || r.scripts.length === 0) {
+          grid.innerHTML = `<div class="sg-state"><i class='bx bx-ghost'></i><p>「${SG.query}」に一致するスクリプトが見つかりませんでした。</p></div>`;
+          SG.results = [];
+        } else {
+          SG.results    = r.scripts;
+          SG.totalPages = r.totalPages || 1;
+          sgRender(r.scripts, SG.page, SG.totalPages);
+        }
+      } catch(e) {
+        grid.innerHTML = `<div class="sg-state"><i class='bx bx-wifi-off'></i><p>読み込みに失敗しました。<br>しばらくしてから再試行してください。</p></div>`;
+      }
+
+      SG.loading = false;
+    }
+
+    /* Render result cards */
+    function sgRender(scripts, page, totalPages) {
+      const grid   = document.getElementById('sgGrid');
+      const status = document.getElementById('sgStatus');
+      const pag    = document.getElementById('sgPagination');
+
+      const filtered = sgApplyFilters(scripts);
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="sg-state"><i class='bx bx-filter-alt'></i><p>現在の絞り込み条件に一致するスクリプトがありません。<br>フィルターを変更してみてください。</p></div>`;
+        status.innerHTML = '';
+        pag.style.display = 'none';
+        return;
+      }
+
+      const filterActive = Object.values(SG.filters).some(Boolean);
+      status.innerHTML = filterActive
+        ? `<span>${filtered.length}</span> 件表示 (全 ${scripts.length} 件中)`
+        : `ページ <span>${page}</span> / ${totalPages} — <span>${scripts.length}</span> 件`;
+
+      grid.innerHTML = filtered.map((s, i) => {
+        const img = sgImg(s.image || (s.game && s.game.imageUrl));
+        const badges = [
+          s.verified   ? '<span class="sg-badge sg-badge-verified">✓ Verified</span>' : '<span class="sg-badge sg-badge-unverified">Unverified</span>',
+          s.scriptType === 'free' ? '<span class="sg-badge sg-badge-free">Free</span>' : '<span class="sg-badge sg-badge-paid">Paid</span>',
+          s.key        ? '<span class="sg-badge sg-badge-key">🔑 Key</span>' : '',
+          s.isPatched  ? '<span class="sg-badge sg-badge-patched">Patched</span>' : '',
+          s.isUniversal? '<span class="sg-badge sg-badge-univ">Universal</span>' : '',
+          s.isHub      ? '<span class="sg-badge sg-badge-hub">Hub</span>' : '',
+        ].join('');
+
+        const gameName = (s.game && s.game.name) || 'Unknown Game';
+
+        return `<div class="sg-card" onclick="sgOpenModal(${i})">
+          <img class="sg-card-thumb" src="${img}" alt="${gameName}" loading="lazy" onerror="this.src='https://scriptblox.com/images/no-script.webp'">
+          <div class="sg-card-info">
+            <div class="sg-card-badges">${badges}</div>
+            <div class="sg-card-title">${s.title}</div>
+            <div class="sg-card-game">${gameName}</div>
+            <div class="sg-card-stats">
+              <span class="sg-stat"><i class='bx bx-show'></i>${sgFmt(s.views)}</span>
+              <span class="sg-stat"><i class='bx bx-heart'></i>${sgFmt(s.likeCount)}</span>
+              <span class="sg-stat"><i class='bx bx-time'></i>${sgRelTime(s.lastBump)}</span>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+
+      /* Pagination */
+      if (totalPages > 1 && !filterActive) {
+        pag.style.display = 'flex';
+        document.getElementById('sgPrev').disabled     = (page <= 1);
+        document.getElementById('sgNext').disabled     = (page >= totalPages);
+        document.getElementById('sgPageInfo').innerHTML = `<b>${page}</b> / ${totalPages}`;
+      } else {
+        pag.style.display = 'none';
+      }
+    }
+
+    /* Page change */
+    function sgChangePage(delta) {
+      SG.page = Math.max(1, Math.min(SG.totalPages, SG.page + delta));
+      sgFetch();
+      document.getElementById('section-scriptget').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /* Open modal */
+    function sgOpenModal(idx) {
+      const filtered = sgApplyFilters(SG.results);
+      const s = filtered[idx];
+      if (!s) return;
+      SG.currentScript = s;
+
+      const img = sgImg(s.image || (s.game && s.game.imageUrl));
+      document.getElementById('sgModalHero').src = img;
+      document.getElementById('sgModalHero').onerror = function() {
+        this.src = 'https://scriptblox.com/images/no-script.webp';
+      };
+
+      const badges = [
+        s.verified   ? '<span class="sg-badge sg-badge-verified">✓ Verified</span>' : '<span class="sg-badge sg-badge-unverified">Unverified</span>',
+        s.scriptType === 'free' ? '<span class="sg-badge sg-badge-free">Free</span>' : '<span class="sg-badge sg-badge-paid">Paid</span>',
+        s.key        ? '<span class="sg-badge sg-badge-key">🔑 Key Required</span>' : '',
+        s.isPatched  ? '<span class="sg-badge sg-badge-patched">⚠ Patched</span>' : '',
+        s.isUniversal? '<span class="sg-badge sg-badge-univ">🌐 Universal</span>' : '',
+        s.isHub      ? '<span class="sg-badge sg-badge-hub">Hub</span>' : '',
+      ].filter(Boolean).join('');
+      document.getElementById('sgModalBadges').innerHTML = badges;
+
+      document.getElementById('sgModalTitle').textContent = s.title;
+      document.getElementById('sgModalGame').textContent  = (s.game && s.game.name) ? '🎮 ' + s.game.name : '';
+
+      document.getElementById('sgModalStats').innerHTML = `
+        <span class="sg-mstat"><i class='bx bx-show'></i><b>${s.views.toLocaleString()}</b> views</span>
+        <span class="sg-mstat"><i class='bx bx-heart'></i><b>${s.likeCount}</b> likes</span>
+        <span class="sg-mstat"><i class='bx bx-dislike'></i><b>${s.dislikeCount}</b></span>
+        <span class="sg-mstat"><i class='bx bx-time'></i>${sgRelTime(s.lastBump)}</span>
+      `;
+
+      document.getElementById('sgModalScript').textContent = s.script || '-- スクリプトが見つかりませんでした';
+
+      const copyBtn = document.getElementById('sgModalCopyBtn');
+      copyBtn.innerHTML = "<i class='bx bx-copy'></i> スクリプトをコピー";
+      copyBtn.classList.remove('copied');
+
+      document.getElementById('sgModalKeyWarn').style.display     = s.key       ? 'flex' : 'none';
+      document.getElementById('sgModalPatchedWarn').style.display = s.isPatched ? 'flex' : 'none';
+
+      document.getElementById('sgModalDate').textContent = `投稿日 ${sgDate(s.createdAt)}  ·  最終更新 ${sgDate(s.lastBump)}`;
+
+      const overlay = document.getElementById('sgModalOverlay');
+      overlay.style.display = 'flex';
+      // Force reflow for transition
+      overlay.getBoundingClientRect();
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    /* Close modal */
+    function sgCloseModal(e) {
+      if (e.target === document.getElementById('sgModalOverlay')) sgCloseModalDirect();
+    }
+    function sgCloseModalDirect() {
+      const overlay = document.getElementById('sgModalOverlay');
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      setTimeout(() => { overlay.style.display = 'none'; }, 220);
+    }
+
+    /* Copy script from modal */
+    function sgModalCopy() {
+      if (!SG.currentScript) return;
+      const text = SG.currentScript.script || '';
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('sgModalCopyBtn');
+        btn.innerHTML = "<i class='bx bx-check'></i> コピーしました!";
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.innerHTML = "<i class='bx bx-copy'></i> スクリプトをコピー";
+          btn.classList.remove('copied');
+        }, 2200);
+      });
+    }
+
+    /* Enter key triggers search */
+    document.getElementById('sgInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') sgSearch();
+    });
+
+    /* Escape closes modal */
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') sgCloseModalDirect();
+    });
 
     /* ── Home copy ── */
     function homeCopy() {
