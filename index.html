@@ -477,6 +477,48 @@
     .like-btn.liked i.bx-heart       { display: none; }
     .like-btn:not(.liked) i.bxs-heart { display: none; }
 
+    /* ── PC grid layout ── */
+    @media (min-width: 640px) {
+      #section-scriptget { max-width: 1100px; }
+      #section-scripts   { max-width: 1000px; }
+
+      /* Scripts section: 2-col */
+      .scripts-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      /* Script Get grid cards: thumbnail on top */
+      .sg-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      .sg-card {
+        flex-direction: column;
+        padding: 0;
+        border-radius: 14px;
+        overflow: hidden;
+      }
+      .sg-card-thumb {
+        width: 100%;
+        height: 150px;
+        border-radius: 0;
+        border: none;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+        flex-shrink: 0;
+      }
+      .sg-card-info {
+        padding: 10px 12px 14px;
+      }
+    }
+
+    @media (min-width: 900px) {
+      .sg-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (min-width: 1120px) {
+      .sg-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
     /* ── Mobile tweaks ── */
     @media (max-width: 480px) {
       .home-card { padding: 20px 14px; }
@@ -1226,11 +1268,17 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
     })();
 
     /* ── Page navigation ── */
+    let sgRecentLoaded = false;
+
     function showPage(name) {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       document.getElementById('section-' + name).classList.add('active');
       document.getElementById('btn-' + name).classList.add('active');
+      // Auto-load recent scripts when Script Get tab is opened for the first time
+      if (name === 'scriptget' && !sgRecentLoaded) {
+        sgLoadRecent();
+      }
     }
 
     /* ══════════════════════════════════════════
@@ -1307,10 +1355,47 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
       });
     }
 
+    /* Load recent scripts from ScriptBlox */
+    async function sgLoadRecent() {
+      sgRecentLoaded = true;
+      const grid   = document.getElementById('sgGrid');
+      const status = document.getElementById('sgStatus');
+      const pag    = document.getElementById('sgPagination');
+
+      grid.innerHTML = `<div class="sg-state loading"><i class='bx bx-loader-alt'></i><p>最新スクリプトを読み込み中...</p></div>`;
+      status.textContent = '';
+      pag.style.display = 'none';
+
+      try {
+        const res  = await fetch('/api/recent?max=20&page=1');
+        const data = await res.json();
+        const r    = data.result;
+
+        if (!r || !r.scripts || r.scripts.length === 0) {
+          grid.innerHTML = `<div class="sg-state"><i class='bx bx-ghost'></i><p>スクリプトが見つかりませんでした。</p></div>`;
+          SG.results = [];
+        } else {
+          SG.results    = r.scripts;
+          SG.totalPages = r.totalPages || 1;
+          SG.query      = '';
+          SG.page       = 1;
+          status.innerHTML = `🆕 最新スクリプト — <span>${r.scripts.length}</span> 件`;
+          sgRender(r.scripts, 1, r.totalPages || 1);
+        }
+      } catch(e) {
+        grid.innerHTML = `<div class="sg-state"><i class='bx bx-wifi-off'></i><p>読み込みに失敗しました。<br>しばらくしてから再試行してください。</p></div>`;
+      }
+    }
+
     /* Main search trigger */
     function sgSearch(resetPage) {
       const q = document.getElementById('sgInput').value.trim();
-      if (!q) return;
+      if (!q) {
+        // Empty query → reload recent
+        sgRecentLoaded = false;
+        sgLoadRecent();
+        return;
+      }
       SG.query = q;
       if (resetPage !== false) SG.page = 1;
       sgFetch();
