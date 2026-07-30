@@ -481,54 +481,47 @@
     @media (min-width: 640px) {
       #section-scriptget { max-width: 1100px; }
       #section-scripts   { max-width: 1000px; }
-
-      /* Scripts section: 2-col */
-      .scripts-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      /* Script Get grid cards: thumbnail on top */
-      .sg-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-      }
-      .sg-card {
-        flex-direction: column;
-        padding: 0;
-        border-radius: 14px;
-        overflow: hidden;
-      }
-      .sg-card-thumb {
-        width: 100%;
-        height: 150px;
-        border-radius: 0;
-        border: none;
-        border-bottom: 1px solid rgba(255,255,255,0.07);
-        flex-shrink: 0;
-      }
-      .sg-card-info {
-        padding: 10px 12px 14px;
-      }
+      .scripts-grid { grid-template-columns: repeat(2, 1fr); }
+      .sg-grid      { grid-template-columns: repeat(2, 1fr); }
     }
-
     @media (min-width: 900px) {
       .sg-grid { grid-template-columns: repeat(3, 1fr); }
     }
-
     @media (min-width: 1120px) {
       .sg-grid { grid-template-columns: repeat(4, 1fr); }
     }
 
     /* ── Mobile tweaks ── */
     @media (max-width: 480px) {
-      .home-card { padding: 20px 14px; }
-      h1 { font-size: 19px; }
+      /* Navbar: shrink to fit; allow horizontal scroll as last resort */
+      .navbar { padding: 0 8px; gap: 2px; }
+      .nav-logo { min-width: 0; flex-shrink: 1; }
+      .nav-logo-text { font-size: 10px; max-width: 80px; }
+      .nav-btn { font-size: 11px; padding: 5px 8px; }
+      /* Page */
+      .page-wrapper { padding: 66px 10px 36px; }
+      .home-card { padding: 18px 12px; }
+      h1 { font-size: 18px; }
       .card-title { font-size: 14px; }
-      .scripts-header h2 { font-size: 18px; }
-      .nav-btn { font-size: 12px; padding: 5px 10px; }
-      .nav-logo-text { font-size: 11.5px; }
-      .code-block pre  { font-size: 10px; }
-      .card-code  pre  { font-size: 10px; }
+      .scripts-header h2 { font-size: 17px; }
+      .code-block pre { font-size: 9.5px; }
+      .card-code  pre { font-size: 9.5px; }
+      /* Scripts cards: compact */
+      .card-game-img { width: 88px; height: 50px; }
+      /* SG */
+      .sg-header h2 { font-size: 17px; }
+      .sg-input { font-size: 13px; padding: 9px 11px; }
+      .sg-search-btn { padding: 9px 13px; font-size: 12px; }
+      .sg-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .sg-body { padding: 7px 8px 10px; }
+      .sg-card-title { font-size: 11px; }
+      .sg-card-game { font-size: 10px; }
+      .sg-card-badges .sg-badge { font-size: 8px; padding: 1px 5px; }
+    }
+    @media (max-width: 360px) {
+      .nav-logo-text { display: none; }
+      .nav-btn { font-size: 10.5px; padding: 5px 7px; }
+      .sg-grid { grid-template-columns: 1fr; }
     }
 
     /* ══ SCRIPT GET ════════════════════════════ */
@@ -622,77 +615,130 @@
     }
     .sg-status span { color: rgba(255,255,255,0.5); font-weight: 600; }
 
-    /* ── Results grid ── */
-    .sg-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-
-    /* ── Result card ── */
-    .sg-card {
-      background: var(--card-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 14px;
-      padding: 13px 14px;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+    /* ── Section label (最近のスクリプト / 検索結果) ── */
+    .sg-section-label {
       display: flex;
-      gap: 12px;
-      cursor: pointer;
-      transition: border-color 0.18s, background 0.18s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .sg-card:hover { border-color: rgba(124,77,255,0.35); background: rgba(20,18,40,0.88); }
-
-    .sg-card-thumb {
-      width: 84px;
-      height: 48px;
-      border-radius: 7px;
-      object-fit: cover;
-      object-position: center;
-      flex-shrink: 0;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(12,12,26,0.8);
-    }
-    @media (max-width: 420px) {
-      .sg-card-thumb { width: 68px; height: 38px; }
-    }
-
-    .sg-card-info {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 4px;
-    }
-
-    .sg-card-badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-bottom: 1px;
-    }
-    .sg-badge {
-      font-size: 9px;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.4px;
       text-transform: uppercase;
-      padding: 2px 6px;
-      border-radius: 4px;
+      color: rgba(255,255,255,0.32);
+      margin: 14px 0 10px;
     }
-    .sg-badge-verified { background: rgba(59,130,246,0.18); border: 1px solid rgba(59,130,246,0.35); color: #60a5fa; }
-    .sg-badge-unverified { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.35); }
-    .sg-badge-free    { background: rgba(34,197,94,0.14); border: 1px solid rgba(34,197,94,0.3); color: #4ade80; }
-    .sg-badge-paid    { background: rgba(234,179,8,0.14); border: 1px solid rgba(234,179,8,0.3); color: #facc15; }
-    .sg-badge-key     { background: rgba(251,146,60,0.14); border: 1px solid rgba(251,146,60,0.3); color: #fb923c; }
-    .sg-badge-patched { background: rgba(239,68,68,0.14); border: 1px solid rgba(239,68,68,0.3); color: #f87171; }
-    .sg-badge-univ    { background: rgba(168,85,247,0.14); border: 1px solid rgba(168,85,247,0.3); color: #c084fc; }
-    .sg-badge-hub     { background: rgba(236,72,153,0.14); border: 1px solid rgba(236,72,153,0.3); color: #f472b6; }
+    .sg-section-label i { font-size: 14px; }
 
+    /* ── Results grid ── */
+    .sg-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    /* ── Result card — image-first vertical layout ── */
+    .sg-card {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.18s, background 0.18s, transform 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      display: flex;
+      flex-direction: column;
+    }
+    .sg-card:hover { border-color: rgba(124,77,255,0.38); transform: translateY(-2px); }
+    .sg-card:active { transform: scale(0.98); }
+
+    /* Image wrapper — always 16:9 */
+    .sg-img-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: rgba(12,12,26,0.9);
+      flex-shrink: 0;
+    }
+    .sg-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    /* Overlays on the image */
+    .sg-views {
+      position: absolute;
+      top: 6px; left: 7px;
+      display: flex; align-items: center; gap: 3px;
+      background: rgba(0,0,0,0.58);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-radius: 20px;
+      padding: 2px 7px;
+      font-size: 9.5px; font-weight: 600;
+      color: rgba(255,255,255,0.85);
+      pointer-events: none;
+    }
+    .sg-views i { font-size: 11px; }
+    .sg-time {
+      position: absolute;
+      top: 6px; right: 7px;
+      background: rgba(0,0,0,0.58);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-radius: 20px;
+      padding: 2px 7px;
+      font-size: 9.5px;
+      color: rgba(255,255,255,0.72);
+      pointer-events: none;
+    }
+    .sg-keybadge {
+      position: absolute;
+      bottom: 6px; left: 7px;
+      display: flex; align-items: center; gap: 3px;
+      background: rgba(251,146,60,0.92);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 8.5px; font-weight: 800; color: #fff;
+      letter-spacing: 0.3px;
+      pointer-events: none;
+    }
+    .sg-keybadge i { font-size: 10px; }
+    .sg-veribadge {
+      position: absolute;
+      bottom: 6px; right: 7px;
+      display: flex; align-items: center; gap: 2px;
+      background: rgba(59,130,246,0.88);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 8.5px; font-weight: 800; color: #fff;
+      pointer-events: none;
+    }
+    .sg-veribadge i { font-size: 10px; }
+
+    /* Card body below image */
+    .sg-body {
+      padding: 9px 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+    .sg-game-row {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 10px;
+      color: rgba(255,255,255,0.36);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sg-game-row i { font-size: 11px; flex-shrink: 0; }
     .sg-card-title {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
       color: #fff;
       white-space: nowrap;
@@ -700,23 +746,38 @@
       text-overflow: ellipsis;
       line-height: 1.3;
     }
-    .sg-card-game {
-      font-size: 11px;
-      color: rgba(255,255,255,0.38);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .sg-card-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+      margin-top: 1px;
     }
+    .sg-badge {
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+    .sg-badge-verified   { background: rgba(59,130,246,0.18); border: 1px solid rgba(59,130,246,0.35); color: #60a5fa; }
+    .sg-badge-unverified { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);  color: rgba(255,255,255,0.3); }
+    .sg-badge-free       { background: rgba(34,197,94,0.14);   border: 1px solid rgba(34,197,94,0.3);   color: #4ade80; }
+    .sg-badge-paid       { background: rgba(234,179,8,0.14);   border: 1px solid rgba(234,179,8,0.3);   color: #facc15; }
+    .sg-badge-key        { background: rgba(251,146,60,0.14);  border: 1px solid rgba(251,146,60,0.3);  color: #fb923c; }
+    .sg-badge-patched    { background: rgba(239,68,68,0.14);   border: 1px solid rgba(239,68,68,0.3);   color: #f87171; }
+    .sg-badge-univ       { background: rgba(168,85,247,0.14);  border: 1px solid rgba(168,85,247,0.3);  color: #c084fc; }
+    .sg-badge-hub        { background: rgba(236,72,153,0.14);  border: 1px solid rgba(236,72,153,0.3);  color: #f472b6; }
     .sg-card-stats {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       margin-top: 2px;
     }
     .sg-stat {
       display: flex;
       align-items: center;
       gap: 3px;
-      font-size: 10px;
+      font-size: 9.5px;
       color: rgba(255,255,255,0.32);
     }
     .sg-stat i { font-size: 11px; }
@@ -898,26 +959,64 @@
     .sg-detail-code::-webkit-scrollbar-track { background: transparent; }
     .sg-detail-code::-webkit-scrollbar-thumb { background: rgba(124,77,255,0.4); border-radius: 4px; }
 
+    /* Detail: action row (link buttons left, copy right) */
+    .sg-detail-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0;
+    }
+    .sg-detail-action-links {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+    .sg-detail-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 9px 13px;
+      border-radius: 9px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.6);
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      white-space: nowrap;
+    }
+    .sg-detail-action-btn i { font-size: 15px; }
+    .sg-detail-action-btn:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.22); }
+    .sg-detail-action-btn.key-btn  { border-color: rgba(251,146,60,0.35); color: #fb923c; background: rgba(251,146,60,0.08); }
+    .sg-detail-action-btn.key-btn:hover  { background: rgba(251,146,60,0.18); }
+    .sg-detail-action-btn.disc-btn { border-color: rgba(88,101,242,0.4);  color: #818cf8; background: rgba(88,101,242,0.08); }
+    .sg-detail-action-btn.disc-btn:hover { background: rgba(88,101,242,0.18); }
+
     .sg-detail-copy-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      width: 100%;
+      gap: 7px;
       background: linear-gradient(135deg,#6d3ff0,#3b82f6);
       border: none;
-      border-radius: 10px;
+      border-radius: 9px;
       color: #fff;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
-      padding: 13px;
+      padding: 10px 18px;
       cursor: pointer;
       transition: opacity 0.15s;
       -webkit-tap-highlight-color: transparent;
       font-family: inherit;
-      letter-spacing: 0.2px;
+      flex-shrink: 0;
+      white-space: nowrap;
     }
-    .sg-detail-copy-btn i { font-size: 17px; }
+    .sg-detail-copy-btn i { font-size: 15px; }
     .sg-detail-copy-btn:hover { opacity: 0.88; }
     .sg-detail-copy-btn.copied { background: linear-gradient(135deg,#16a34a,#15803d); }
 
@@ -1244,12 +1343,15 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
 
       <!-- Search results -->
       <div id="sg-search-view">
+        <div class="sg-section-label" id="sgSectionLabel">
+          <i class='bx bx-loader-alt'></i> 最近のスクリプト
+        </div>
         <div class="sg-status" id="sgStatus"></div>
 
         <div class="sg-grid" id="sgGrid">
-          <div class="sg-state">
-            <i class='bx bx-search-alt'></i>
-            <p>キーワードを入力してスクリプトを検索しましょう。<br>Enterキーまたは検索ボタンで開始します。</p>
+          <div class="sg-state loading">
+            <i class='bx bx-loader-alt'></i>
+            <p>最新スクリプトを読み込み中...</p>
           </div>
         </div>
 
@@ -1311,10 +1413,13 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
             <pre id="sgDetailScript"></pre>
           </div>
 
-          <!-- Copy button -->
-          <button class="sg-detail-copy-btn" id="sgDetailCopyBtn" onclick="sgDetailCopy()">
-            <i class='bx bx-copy'></i> スクリプトをコピー
-          </button>
+          <!-- Action row: link buttons (key/discord) left, compact copy right -->
+          <div class="sg-detail-actions">
+            <div class="sg-detail-action-links" id="sgDetailActionLinks"></div>
+            <button class="sg-detail-copy-btn" id="sgDetailCopyBtn" onclick="sgDetailCopy()">
+              <i class='bx bx-copy'></i> コピー
+            </button>
+          </div>
 
           <!-- Warnings -->
           <div id="sgDetailKeyWarn" class="sg-detail-warn sg-detail-warn-key" style="display:none">
@@ -1466,19 +1571,21 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
       });
     }
 
-    /* Load recent scripts from ScriptBlox */
+    /* Load recent scripts from ScriptBlox (uses broad query "hub" to get popular scripts) */
     async function sgLoadRecent() {
       sgRecentLoaded = true;
       const grid   = document.getElementById('sgGrid');
       const status = document.getElementById('sgStatus');
+      const label  = document.getElementById('sgSectionLabel');
       const pag    = document.getElementById('sgPagination');
 
       grid.innerHTML = `<div class="sg-state loading"><i class='bx bx-loader-alt'></i><p>最新スクリプトを読み込み中...</p></div>`;
       status.textContent = '';
+      if (label) label.innerHTML = `<i class='bx bx-time'></i> 最近のスクリプト`;
       pag.style.display = 'none';
 
       try {
-        const res  = await fetch('/api/recent?max=20&page=1');
+        const res  = await fetch('/api/search?q=hub&max=20&page=1');
         const data = await res.json();
         const r    = data.result;
 
@@ -1490,13 +1597,15 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
           SG.totalPages = r.totalPages || 1;
           SG.query      = '';
           SG.page       = 1;
-          status.innerHTML = `🆕 最新スクリプト — <span>${r.scripts.length}</span> 件`;
           sgRender(r.scripts, 1, r.totalPages || 1);
         }
       } catch(e) {
         grid.innerHTML = `<div class="sg-state"><i class='bx bx-wifi-off'></i><p>読み込みに失敗しました。<br>しばらくしてから再試行してください。</p></div>`;
       }
     }
+
+    /* CJK detection (matches Japanese/Chinese/Korean) */
+    function hasCJK(s) { return /[\u3000-\u9fff\uac00-\ud7af]/.test(s); }
 
     /* Main search trigger */
     function sgSearch(resetPage) {
@@ -1509,6 +1618,12 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
       }
       SG.query = q;
       if (resetPage !== false) SG.page = 1;
+      const label = document.getElementById('sgSectionLabel');
+      if (label) {
+        label.innerHTML = hasCJK(q)
+          ? `<i class='bx bx-search'></i> 「${q}」を翻訳して検索中...`
+          : `<i class='bx bx-search'></i> 「${q}」の検索結果`;
+      }
       sgFetch();
     }
 
@@ -1529,6 +1644,15 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
         const res  = await fetch(sgApiUrl(SG.query, SG.page, 20));
         const data = await res.json();
         const r    = data.result;
+
+        /* Update label with translated query if server translated it */
+        const tq = r && r._translatedQuery;
+        const label = document.getElementById('sgSectionLabel');
+        if (label && tq && tq !== SG.query) {
+          label.innerHTML = `<i class='bx bx-search'></i> 「${SG.query}」→ "${tq}" の検索結果`;
+        } else if (label) {
+          label.innerHTML = `<i class='bx bx-search'></i> 「${SG.query}」の検索結果`;
+        }
 
         if (!r || !r.scripts || r.scripts.length === 0) {
           grid.innerHTML = `<div class="sg-state"><i class='bx bx-ghost'></i><p>「${SG.query}」に一致するスクリプトが見つかりませんでした。</p></div>`;
@@ -1566,28 +1690,41 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
         : `ページ <span>${page}</span> / ${totalPages} — <span>${scripts.length}</span> 件`;
 
       grid.innerHTML = filtered.map((s, i) => {
-        const img = sgImg(s.image || (s.game && s.game.imageUrl));
-        const badges = [
-          s.verified   ? `<span class="sg-badge sg-badge-verified"><i class='bx bx-badge-check'></i> Verified</span>` : `<span class="sg-badge sg-badge-unverified"><i class='bx bx-minus-circle'></i> Unverified</span>`,
-          s.scriptType === 'free' ? `<span class="sg-badge sg-badge-free"><i class='bx bx-dollar-circle'></i> Free</span>` : `<span class="sg-badge sg-badge-paid"><i class='bx bx-credit-card'></i> Paid</span>`,
-          s.key        ? `<span class="sg-badge sg-badge-key"><i class='bx bx-key'></i> Key</span>` : '',
-          s.isPatched  ? `<span class="sg-badge sg-badge-patched"><i class='bx bx-error'></i> Patched</span>` : '',
-          s.isUniversal? `<span class="sg-badge sg-badge-univ"><i class='bx bx-globe'></i> Universal</span>` : '',
-          s.isHub      ? `<span class="sg-badge sg-badge-hub"><i class='bx bx-grid-alt'></i> Hub</span>` : '',
-        ].join('');
+        const img      = sgImg(s.image || (s.game && s.game.imageUrl));
+        const gameName = (s.game && s.game.name) || 'Unknown';
 
-        const gameName = (s.game && s.game.name) || 'Unknown Game';
+        /* Image overlays */
+        const keyBadge  = s.key
+          ? `<div class="sg-keybadge"><i class='bx bx-key'></i>Key</div>` : '';
+        const veriBadge = s.verified
+          ? `<div class="sg-veribadge"><i class='bx bx-badge-check'></i>Verified</div>` : '';
+        const patchedOverlay = s.isPatched
+          ? `<div class="sg-keybadge" style="background:rgba(239,68,68,0.9);bottom:auto;top:6px;left:auto;right:7px"><i class='bx bx-error'></i>Patched</div>` : '';
+
+        /* Body badges */
+        const badges = [
+          s.scriptType === 'free'
+            ? `<span class="sg-badge sg-badge-free"><i class='bx bx-dollar-circle'></i> Free</span>`
+            : `<span class="sg-badge sg-badge-paid"><i class='bx bx-credit-card'></i> Paid</span>`,
+          s.isUniversal ? `<span class="sg-badge sg-badge-univ"><i class='bx bx-globe'></i> Universal</span>` : '',
+          s.isHub       ? `<span class="sg-badge sg-badge-hub"><i class='bx bx-grid-alt'></i> Hub</span>` : '',
+        ].filter(Boolean).join('');
 
         return `<div class="sg-card" onclick="sgOpenDetail(${i})">
-          <img class="sg-card-thumb" src="${img}" alt="${gameName}" loading="lazy" onerror="this.src='https://scriptblox.com/images/no-script.webp'">
-          <div class="sg-card-info">
-            <div class="sg-card-badges">${badges}</div>
+          <div class="sg-img-wrap">
+            <img class="sg-img" src="${img}" alt="${gameName}" loading="lazy"
+                 onerror="this.src='https://scriptblox.com/images/no-script.webp'">
+            <div class="sg-views"><i class='bx bx-show'></i>${sgFmt(s.views)}</div>
+            <div class="sg-time">${sgRelTime(s.lastBump)}</div>
+            ${keyBadge}${veriBadge}${patchedOverlay}
+          </div>
+          <div class="sg-body">
+            <div class="sg-game-row"><i class='bx bx-joystick'></i>${gameName}</div>
             <div class="sg-card-title">${s.title}</div>
-            <div class="sg-card-game">${gameName}</div>
+            <div class="sg-card-badges">${badges}</div>
             <div class="sg-card-stats">
-              <span class="sg-stat"><i class='bx bx-show'></i>${sgFmt(s.views)}</span>
               <span class="sg-stat"><i class='bx bx-heart'></i>${sgFmt(s.likeCount)}</span>
-              <span class="sg-stat"><i class='bx bx-time-five'></i>${sgRelTime(s.lastBump)}</span>
+              <span class="sg-stat"><i class='bx bx-show'></i>${sgFmt(s.views)}</span>
             </div>
           </div>
         </div>`;
@@ -1674,8 +1811,24 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
 
       /* Copy button reset */
       const copyBtn = document.getElementById('sgDetailCopyBtn');
-      copyBtn.innerHTML = "<i class='bx bx-copy'></i> スクリプトをコピー";
+      copyBtn.innerHTML = "<i class='bx bx-copy'></i> コピー";
       copyBtn.classList.remove('copied');
+
+      /* Action link buttons (key system + discord) */
+      const actionLinks = document.getElementById('sgDetailActionLinks');
+      const linkBtns = [];
+      const keyLink = s.keyLink || s.key_link || s.keyUrl || '';
+      if (s.key && keyLink) {
+        linkBtns.push(`<a class="sg-detail-action-btn key-btn" href="${keyLink}" target="_blank" rel="noopener"><i class='bx bx-key'></i> Key System</a>`);
+      } else if (s.key) {
+        linkBtns.push(`<span class="sg-detail-action-btn key-btn" style="cursor:default"><i class='bx bx-key'></i> Key System</span>`);
+      }
+      const discLink = s.discord || s.discordServer || s.discordLink || '';
+      if (discLink) {
+        const href = discLink.startsWith('http') ? discLink : `https://discord.gg/${discLink}`;
+        linkBtns.push(`<a class="sg-detail-action-btn disc-btn" href="${href}" target="_blank" rel="noopener"><i class='bx bxl-discord-alt'></i> Discord</a>`);
+      }
+      actionLinks.innerHTML = linkBtns.join('');
 
       /* Warnings */
       document.getElementById('sgDetailKeyWarn').style.display     = s.key       ? 'flex' : 'none';
