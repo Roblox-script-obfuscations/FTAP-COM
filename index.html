@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-  <title>FTAP — Roblox External Loader</title>
+  <title>ROBLOX FTAP DATA</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%237c4dff' d='M9 10c.55 0 1-.45 1-1V7h4.14c.45 1.72 2 3 3.86 3 2.21 0 4-1.79 4-4s-1.79-4-4-4c-1.86 0-3.41 1.28-3.86 3H10V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h2v4.09L1.79 17.3a.996.996 0 0 0 0 1.41l3.5 3.5c.2.2.45.29.71.29s.51-.1.71-.29L9.92 19h4.09v2c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-6c0-.55-.45-1-1-1h-6c-.55 0-1 .45-1 1v2H9.92l-2.91-2.91V10h2Zm9-6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m-2 12h4v4h-4zM6 20.09 3.91 18 6 15.91 8.09 18zM4 4h4v4H4z'/></svg>">
   <meta property="og:image" content="https://i.pinimg.com/736x/e7/8a/36/e78a36e17d2b51c01baa24507eab2b9c.jpg">
-  <meta property="og:title" content="FTAP — Roblox External Loader">
+  <meta property="og:title" content="ROBLOX FTAP DATA">
+  <link rel="canonical" href="https://ftap-com.vercel.app/">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://i.pinimg.com/736x/e7/8a/36/e78a36e17d2b51c01baa24507eab2b9c.jpg">
@@ -1074,8 +1075,9 @@
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.07);
       border-radius: 10px;
-      padding: 12px 14px;
+      padding: 12px 14px 0;
       margin-bottom: 14px;
+      overflow: hidden;
     }
     .sg-detail-desc-block h4 {
       font-size: 10px;
@@ -1089,13 +1091,50 @@
       gap: 5px;
     }
     .sg-detail-desc-block h4 i { font-size: 12px; }
-    .sg-detail-desc-block p {
+    /* Collapsible body */
+    .sg-desc-body {
+      position: relative;
+      max-height: 88px;   /* ~4 lines collapsed */
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+    }
+    .sg-desc-body.expanded { max-height: 2000px; }
+    .sg-desc-body p {
       font-size: 12px;
       line-height: 1.65;
       color: rgba(255,255,255,0.55);
       white-space: pre-wrap;
       word-break: break-word;
+      padding-bottom: 10px;
     }
+    /* Blur / fade-out gradient */
+    .sg-desc-fade {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 48px;
+      background: linear-gradient(to bottom, transparent, rgba(14,14,26,0.92));
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .sg-desc-body.expanded .sg-desc-fade { opacity: 0; pointer-events: none; }
+    /* Show more / less button */
+    .sg-show-more-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: none;
+      border: none;
+      color: rgba(124,77,255,0.75);
+      font-size: 11.5px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      padding: 6px 0 10px;
+      -webkit-tap-highlight-color: transparent;
+      transition: color 0.15s;
+    }
+    .sg-show-more-btn:hover { color: #a78bfa; }
+    .sg-show-more-btn i { font-size: 13px; }
 
     /* ── Detail: hero image fill fix for mobile ── */
     .sg-detail-hero-wrap {
@@ -1140,7 +1179,7 @@
 
   <!-- Navbar -->
   <nav class="navbar">
-    <div class="nav-logo">
+    <a class="nav-logo" href="https://ftap-com.vercel.app/" style="text-decoration:none">
       <!-- Icon -->
       <svg class="nav-logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="url(#logoGrad)">
         <defs>
@@ -1153,7 +1192,7 @@
       </svg>
       <!-- Typing text -->
       <span class="nav-logo-text" id="navLogoText"></span>
-    </div>
+    </a>
     <button class="nav-btn active" id="btn-home"      onclick="showPage('home')">Home</button>
     <button class="nav-btn"        id="btn-scripts"   onclick="showPage('scripts')">Scripts</button>
     <button class="nav-btn"        id="btn-scriptget" onclick="showPage('scriptget')">Script Get</button>
@@ -1400,7 +1439,13 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
           <!-- Description (shown only if available) -->
           <div class="sg-detail-desc-block" id="sgDetailDescBlock" style="display:none">
             <h4><i class='bx bx-info-circle'></i> Description</h4>
-            <p id="sgDetailDesc"></p>
+            <div class="sg-desc-body" id="sgDescBody">
+              <p id="sgDetailDesc"></p>
+              <div class="sg-desc-fade" id="sgDescFade"></div>
+            </div>
+            <button class="sg-show-more-btn" id="sgShowMoreBtn" onclick="sgToggleDesc()">
+              <i class='bx bx-chevron-down'></i> Show more
+            </button>
           </div>
 
           <!-- Script label -->
@@ -1507,6 +1552,7 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
       filters:     { verified: false, free: false, nokey: false, universal: false, nopatched: false },
       loading:     false,
       currentScript: null,
+      recentMode:  true,   /* true while showing "最近のスクリプト" (no explicit query) */
     };
 
     /* Vercel proxy → ScriptBlox (same-origin, no CORS issue) */
@@ -1597,6 +1643,7 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
           SG.totalPages = r.totalPages || 1;
           SG.query      = '';
           SG.page       = 1;
+          SG.recentMode = true;
           sgRender(r.scripts, 1, r.totalPages || 1);
         }
       } catch(e) {
@@ -1616,7 +1663,8 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
         sgLoadRecent();
         return;
       }
-      SG.query = q;
+      SG.query      = q;
+      SG.recentMode = false;
       if (resetPage !== false) SG.page = 1;
       const label = document.getElementById('sgSectionLabel');
       if (label) {
@@ -1744,8 +1792,38 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
     /* Page change */
     function sgChangePage(delta) {
       SG.page = Math.max(1, Math.min(SG.totalPages, SG.page + delta));
-      sgFetch();
+      if (SG.recentMode) {
+        sgLoadRecent_page(SG.page);
+      } else {
+        sgFetch();
+      }
       document.getElementById('section-scriptget').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /* Paginated recent fetch (reuses the hub query with a different page) */
+    async function sgLoadRecent_page(page) {
+      if (SG.loading) return;
+      SG.loading = true;
+      const grid   = document.getElementById('sgGrid');
+      const pag    = document.getElementById('sgPagination');
+      grid.innerHTML = `<div class="sg-state loading"><i class='bx bx-loader-alt'></i><p>読み込み中...</p></div>`;
+      pag.style.display = 'none';
+      try {
+        const res  = await fetch(`/api/search?q=hub&max=20&page=${page}`);
+        const data = await res.json();
+        const r    = data.result;
+        if (r && r.scripts && r.scripts.length > 0) {
+          SG.results    = r.scripts;
+          SG.totalPages = r.totalPages || 1;
+          SG.page       = page;
+          sgRender(r.scripts, page, SG.totalPages);
+        } else {
+          grid.innerHTML = `<div class="sg-state"><i class='bx bx-ghost'></i><p>スクリプトが見つかりませんでした。</p></div>`;
+        }
+      } catch(e) {
+        grid.innerHTML = `<div class="sg-state"><i class='bx bx-wifi-off'></i><p>読み込みに失敗しました。</p></div>`;
+      }
+      SG.loading = false;
     }
 
     /* Populate detail view from a script object */
@@ -1796,12 +1874,29 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
         <div class="sg-dstat"><i class='bx bx-time-five'></i><b>${sgRelTime(s.lastBump)}</b><span>更新</span></div>
       `;
 
-      /* Description */
-      const desc = s.desc || s.description || '';
+      /* Description — ScriptBlox uses several field names */
+      const desc = s.desc || s.description || s.rawdesc || s.descriptionHtml || '';
       const descBlock = document.getElementById('sgDetailDescBlock');
-      if (desc) {
-        document.getElementById('sgDetailDesc').textContent = desc;
+      const descBody  = document.getElementById('sgDescBody');
+      const descFade  = document.getElementById('sgDescFade');
+      const showBtn   = document.getElementById('sgShowMoreBtn');
+      if (desc && desc.trim()) {
+        document.getElementById('sgDetailDesc').textContent = desc.trim();
         descBlock.style.display = 'block';
+        /* Reset collapsed state */
+        descBody.classList.remove('expanded');
+        showBtn.innerHTML = "<i class='bx bx-chevron-down'></i> Show more";
+        showBtn.style.display = 'flex';
+        descFade.style.opacity = '1';
+        /* If text is short enough, no need for show more */
+        requestAnimationFrame(() => {
+          if (descBody.scrollHeight <= descBody.offsetHeight + 4) {
+            showBtn.style.display = 'none';
+            descFade.style.display = 'none';
+          } else {
+            descFade.style.display = 'block';
+          }
+        });
       } else {
         descBlock.style.display = 'none';
       }
@@ -1864,6 +1959,18 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
           }
         } catch(e) { /* silently keep existing data */ }
       }
+    }
+
+    /* Toggle description expand / collapse */
+    function sgToggleDesc() {
+      const body = document.getElementById('sgDescBody');
+      const btn  = document.getElementById('sgShowMoreBtn');
+      const fade = document.getElementById('sgDescFade');
+      const expanded = body.classList.toggle('expanded');
+      btn.innerHTML  = expanded
+        ? "<i class='bx bx-chevron-up'></i> Show less"
+        : "<i class='bx bx-chevron-down'></i> Show more";
+      fade.style.opacity = expanded ? '0' : '1';
     }
 
     /* Close detail card — back to search results */
