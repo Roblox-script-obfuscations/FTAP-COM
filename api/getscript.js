@@ -6,13 +6,14 @@ export default async function handler(req, res) {
   const { slug } = req.query;
   if (!slug) return res.status(400).json({ error: 'slug required' });
 
-  const url = `https://scriptblox.com/api/script/${encodeURIComponent(slug)}`;
+  /* ScriptBlox single-script endpoint: fetch?slug=SLUG */
+  const url = `https://scriptblox.com/api/script/fetch?slug=${encodeURIComponent(slug)}`;
   try {
     const r = await fetch(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        'Accept': 'application/json',
-        'Referer': 'https://scriptblox.com/',
+        'Accept':     'application/json',
+        'Referer':    'https://scriptblox.com/',
       },
     });
     if (!r.ok) return res.status(r.status).json({ error: 'upstream error', status: r.status });

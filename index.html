@@ -933,6 +933,39 @@
       gap: 5px;
     }
     .sg-detail-code-label i { font-size: 13px; }
+    /* Raw button (right side of SCRIPT label) */
+    .sg-raw-btn {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      color: rgba(255,255,255,0.4);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sg-raw-btn i { font-size: 12px; }
+    .sg-raw-btn:hover { background: rgba(124,77,255,0.18); border-color: rgba(124,77,255,0.4); color: #c4b5fd; }
+
+    /* Description loading placeholder */
+    .sg-desc-loading {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.22);
+      padding: 6px 0 12px;
+    }
+    .sg-desc-loading i { font-size: 13px; animation: sgSpin 0.8s linear infinite; }
 
     .sg-detail-code {
       background: rgba(4,4,14,0.9);
@@ -1436,21 +1469,27 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
           <!-- Stats bar -->
           <div class="sg-detail-stats" id="sgDetailStats"></div>
 
-          <!-- Description (shown only if available) -->
-          <div class="sg-detail-desc-block" id="sgDetailDescBlock" style="display:none">
+          <!-- Description (always shown while loading, hidden only if confirmed empty) -->
+          <div class="sg-detail-desc-block" id="sgDetailDescBlock">
             <h4><i class='bx bx-info-circle'></i> Description</h4>
-            <div class="sg-desc-body" id="sgDescBody">
+            <div class="sg-desc-loading" id="sgDescLoading">
+              <i class='bx bx-loader-alt'></i> 説明を読み込み中...
+            </div>
+            <div class="sg-desc-body" id="sgDescBody" style="display:none">
               <p id="sgDetailDesc"></p>
               <div class="sg-desc-fade" id="sgDescFade"></div>
             </div>
-            <button class="sg-show-more-btn" id="sgShowMoreBtn" onclick="sgToggleDesc()">
+            <button class="sg-show-more-btn" id="sgShowMoreBtn" onclick="sgToggleDesc()" style="display:none">
               <i class='bx bx-chevron-down'></i> Show more
             </button>
           </div>
 
-          <!-- Script label -->
+          <!-- Script label + Raw button -->
           <div class="sg-detail-code-label">
             <i class='bx bx-code-curly'></i> SCRIPT
+            <button class="sg-raw-btn" onclick="sgDetailRaw()">
+              <i class='bx bx-code-alt'></i> Raw
+            </button>
           </div>
 
           <!-- Script code -->
@@ -1874,32 +1913,8 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
         <div class="sg-dstat"><i class='bx bx-time-five'></i><b>${sgRelTime(s.lastBump)}</b><span>更新</span></div>
       `;
 
-      /* Description — ScriptBlox uses several field names */
-      const desc = s.desc || s.description || s.rawdesc || s.descriptionHtml || '';
-      const descBlock = document.getElementById('sgDetailDescBlock');
-      const descBody  = document.getElementById('sgDescBody');
-      const descFade  = document.getElementById('sgDescFade');
-      const showBtn   = document.getElementById('sgShowMoreBtn');
-      if (desc && desc.trim()) {
-        document.getElementById('sgDetailDesc').textContent = desc.trim();
-        descBlock.style.display = 'block';
-        /* Reset collapsed state */
-        descBody.classList.remove('expanded');
-        showBtn.innerHTML = "<i class='bx bx-chevron-down'></i> Show more";
-        showBtn.style.display = 'flex';
-        descFade.style.opacity = '1';
-        /* If text is short enough, no need for show more */
-        requestAnimationFrame(() => {
-          if (descBody.scrollHeight <= descBody.offsetHeight + 4) {
-            showBtn.style.display = 'none';
-            descFade.style.display = 'none';
-          } else {
-            descFade.style.display = 'block';
-          }
-        });
-      } else {
-        descBlock.style.display = 'none';
-      }
+      /* Description — ScriptBlox uses several field names; null means still loading */
+      sgSetDesc(s.desc || s.description || s.rawdesc || s.descriptionHtml || null);
 
       /* Script code */
       document.getElementById('sgDetailScript').textContent = s.script || '-- スクリプトが見つかりませんでした';
@@ -1940,25 +1955,91 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
       const s = filtered[idx];
       if (!s) return;
 
-      /* Show with data we already have */
+      /* Show immediately with what we have from search results */
       sgPopulateDetail(s);
+
+      /* If search result has no desc, show loading spinner for description */
+      const hasInitialDesc = !!(s.desc || s.description || s.rawdesc || '').trim();
+      if (!hasInitialDesc && s.slug) {
+        sgSetDesc(null);   /* spinner */
+      }
+
       document.getElementById('sg-search-view').style.display = 'none';
       document.getElementById('sgFilters').style.display      = 'none';
       document.getElementById('sg-detail-view').style.display = 'block';
       document.getElementById('section-scriptget').scrollIntoView({ block: 'start' });
 
-      /* Fetch full details (description, author etc.) from individual endpoint */
+      /* Fetch full details from /api/getscript (description, discord, keyLink, etc.) */
       if (s.slug) {
         try {
           const res  = await fetch(`/api/getscript?slug=${encodeURIComponent(s.slug)}`);
           const data = await res.json();
-          /* ScriptBlox returns { script: {...} } */
-          const full = data.script || data;
-          if (full && full.title) {
-            sgPopulateDetail({ ...s, ...full });
+          /* ScriptBlox fetch endpoint may wrap in { script: {...} } or { result: {...} } */
+          const full = data.script || (data.result && data.result.script) || data;
+          if (full && (full.title || full._id)) {
+            const merged = { ...s, ...full };
+            sgPopulateDetail(merged);
+          } else {
+            /* Fetch failed/empty — mark desc as confirmed empty */
+            if (!hasInitialDesc) sgSetDesc('');
           }
-        } catch(e) { /* silently keep existing data */ }
+        } catch(e) {
+          if (!hasInitialDesc) sgSetDesc('');
+        }
       }
+    }
+
+    /* Set description content.
+       null  = still loading (show spinner)
+       ''    = confirmed empty (hide block)
+       text  = show text with blur/show-more */
+    function sgSetDesc(desc) {
+      const descBlock   = document.getElementById('sgDetailDescBlock');
+      const loading     = document.getElementById('sgDescLoading');
+      const descBody    = document.getElementById('sgDescBody');
+      const descFade    = document.getElementById('sgDescFade');
+      const showBtn     = document.getElementById('sgShowMoreBtn');
+
+      if (desc === null) {
+        /* Loading state */
+        descBlock.style.display = 'block';
+        loading.style.display   = 'flex';
+        descBody.style.display  = 'none';
+        showBtn.style.display   = 'none';
+        return;
+      }
+      if (!desc || !desc.trim()) {
+        /* Confirmed empty */
+        descBlock.style.display = 'none';
+        return;
+      }
+      /* Has content */
+      descBlock.style.display = 'block';
+      loading.style.display   = 'none';
+      descBody.style.display  = 'block';
+      document.getElementById('sgDetailDesc').textContent = desc.trim();
+      descBody.classList.remove('expanded');
+      showBtn.innerHTML = "<i class='bx bx-chevron-down'></i> Show more";
+      descFade.style.opacity   = '1';
+      descFade.style.display   = 'block';
+      showBtn.style.display    = 'flex';
+      requestAnimationFrame(() => {
+        if (descBody.scrollHeight <= descBody.offsetHeight + 4) {
+          showBtn.style.display  = 'none';
+          descFade.style.display = 'none';
+        }
+      });
+    }
+
+    /* Open raw script in a new tab as plain text */
+    function sgDetailRaw() {
+      const script = SG.currentScript && SG.currentScript.script;
+      if (!script) return;
+      const blob = new Blob([script], { type: 'text/plain;charset=utf-8' });
+      const url  = URL.createObjectURL(blob);
+      const win  = window.open(url, '_blank');
+      /* Revoke after navigation so memory isn't held */
+      if (win) win.addEventListener('load', () => URL.revokeObjectURL(url), { once: true });
     }
 
     /* Toggle description expand / collapse */
