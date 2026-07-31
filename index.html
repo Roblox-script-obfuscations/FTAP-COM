@@ -967,6 +967,27 @@
     }
     .sg-desc-loading i { font-size: 13px; animation: sgSpin 0.8s linear infinite; }
 
+    /* Retry button inside error states */
+    .sg-retry-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 10px;
+      background: rgba(124,77,255,0.15);
+      border: 1px solid rgba(124,77,255,0.35);
+      border-radius: 8px;
+      color: #c4b5fd;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 16px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sg-retry-btn:hover { background: rgba(124,77,255,0.28); border-color: rgba(124,77,255,0.6); }
+    .sg-retry-btn i { font-size: 14px; }
+
     .sg-detail-code {
       background: rgba(4,4,14,0.9);
       border: 1px solid rgba(255,255,255,0.07);
@@ -1594,7 +1615,69 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
       recentMode:  true,   /* true while showing "最近のスクリプト" (no explicit query) */
     };
 
-    /* Vercel proxy → ScriptBlox (same-origin, no CORS issue) */
+    /* ── ScriptBlox API helper ──────────────────────────────────────
+       ScriptBlox now returns access-control-allow-origin: * so browser
+       can call it directly.  We try the direct URL first (fast, no proxy
+       overhead) and fall back to our Vercel proxy if the direct call fails.
+    ─────────────────────────────────────────────────────────────── */
+    const SB = 'https://scriptblox.com/api';
+
+    async function sgCallSearch(q, page, max) {
+      const direct = `${SB}/script/search?q=${encodeURIComponent(q)}&max=${max}&page=${page}`;
+      const proxy  = `/api/search?q=${encodeURIComponent(q)}&max=${max}&page=${page}`;
+
+      /* 1. Try ScriptBlox directly (browser → CORS: * → should work) */
+      try {
+        const ac = new AbortController();
+        const t  = setTimeout(() => ac.abort(), 12000);
+        const r  = await fetch(direct, { headers: { Accept: 'application/json' }, signal: ac.signal });
+        clearTimeout(t);
+        if (r.ok) {
+          const d = await r.json();
+          if (d.result) return d;
+        }
+      } catch (_) { /* direct blocked/timeout → try proxy */ }
+
+      /* 2. Fallback: Vercel Edge proxy */
+      const ac2 = new AbortController();
+      const t2  = setTimeout(() => ac2.abort(), 15000);
+      try {
+        const r2 = await fetch(proxy, { signal: ac2.signal });
+        clearTimeout(t2);
+        if (!r2.ok) throw new Error('proxy ' + r2.status);
+        return await r2.json();
+      } finally { clearTimeout(t2); }
+    }
+
+    /* Try fetching a single script's full data (slug first, then _id) */
+    async function sgCallGetscript(slug, id) {
+      const tries = [];
+      if (slug) {
+        tries.push(`${SB}/script/fetch?slug=${encodeURIComponent(slug)}`);
+        tries.push(`/api/getscript?slug=${encodeURIComponent(slug)}`);
+      }
+      if (id) {
+        tries.push(`${SB}/script/fetch?id=${encodeURIComponent(id)}`);
+        tries.push(`/api/getscript?id=${encodeURIComponent(id)}`);
+      }
+
+      for (const url of tries) {
+        try {
+          const ac = new AbortController();
+          const t  = setTimeout(() => ac.abort(), 8000);
+          const r  = await fetch(url, { headers: { Accept: 'application/json' }, signal: ac.signal });
+          clearTimeout(t);
+          if (!r.ok) continue;
+          const d = await r.json();
+          /* ScriptBlox wraps response in { script: {...} } or { result: { script: {...} } } */
+          const s = d.script || (d.result && d.result.script) || d;
+          if (s && (s.title || s._id || s.slug)) return s;
+        } catch (_) { /* try next */ }
+      }
+      return null;
+    }
+
+    /* Legacy compat */
     function sgApiUrl(q, page, max) {
       return `/api/search?q=${encodeURIComponent(q)}&max=${max}&page=${page}`;
     }
@@ -1670,8 +1753,7 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
       pag.style.display = 'none';
 
       try {
-        const res  = await fetch('/api/search?q=hub&max=20&page=1');
-        const data = await res.json();
+        const data = await sgCallSearch('hub', 1, 20);
         const r    = data.result;
 
         if (!r || !r.scripts || r.scripts.length === 0) {
@@ -1686,7 +1768,7 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
           sgRender(r.scripts, 1, r.totalPages || 1);
         }
       } catch(e) {
-        grid.innerHTML = `<div class="sg-state"><i class='bx bx-wifi-off'></i><p>読み込みに失敗しました。<br>しばらくしてから再試行してください。</p></div>`;
+        grid.innerHTML = `<div class="sg-state"><i class='bx bx-wifi-off'></i><p>読み込みに失敗しました。<br><button class="sg-retry-btn" onclick="sgRecentLoaded=false;sgLoadRecent()"><i class='bx bx-refresh'></i> 再試行</button></p></div>`;
       }
     }
 
@@ -1728,8 +1810,7 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
       pag.style.display = 'none';
 
       try {
-        const res  = await fetch(sgApiUrl(SG.query, SG.page, 20));
-        const data = await res.json();
+        const data = await sgCallSearch(SG.query, SG.page, 20);
         const r    = data.result;
 
         /* Update label with translated query if server translated it */
@@ -1750,7 +1831,7 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
           sgRender(r.scripts, SG.page, SG.totalPages);
         }
       } catch(e) {
-        grid.innerHTML = `<div class="sg-state"><i class='bx bx-wifi-off'></i><p>読み込みに失敗しました。<br>しばらくしてから再試行してください。</p></div>`;
+        grid.innerHTML = `<div class="sg-state"><i class='bx bx-wifi-off'></i><p>読み込みに失敗しました。<br><button class="sg-retry-btn" onclick="sgFetch()"><i class='bx bx-refresh'></i> 再試行</button></p></div>`;
       }
 
       SG.loading = false;
@@ -1848,8 +1929,7 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
       grid.innerHTML = `<div class="sg-state loading"><i class='bx bx-loader-alt'></i><p>読み込み中...</p></div>`;
       pag.style.display = 'none';
       try {
-        const res  = await fetch(`/api/search?q=hub&max=20&page=${page}`);
-        const data = await res.json();
+        const data = await sgCallSearch('hub', page, 20);
         const r    = data.result;
         if (r && r.scripts && r.scripts.length > 0) {
           SG.results    = r.scripts;
@@ -1913,8 +1993,10 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
         <div class="sg-dstat"><i class='bx bx-time-five'></i><b>${sgRelTime(s.lastBump)}</b><span>更新</span></div>
       `;
 
-      /* Description — ScriptBlox uses several field names; null means still loading */
-      sgSetDesc(s.desc || s.description || s.rawdesc || s.descriptionHtml || null);
+      /* Description — ScriptBlox uses several field names.
+         Pass '' (hide) not null (spinner) because spinner is set
+         explicitly by sgOpenDetail only when a fetch is in flight. */
+      sgSetDesc(s.desc || s.description || s.rawdesc || s.descriptionHtml || '');
 
       /* Script code */
       document.getElementById('sgDetailScript').textContent = s.script || '-- スクリプトが見つかりませんでした';
@@ -1958,34 +2040,19 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
       /* Show immediately with what we have from search results */
       sgPopulateDetail(s);
 
-      /* If search result has no desc, show loading spinner for description */
-      const hasInitialDesc = !!(s.desc || s.description || s.rawdesc || '').trim();
-      if (!hasInitialDesc && s.slug) {
-        sgSetDesc(null);   /* spinner */
-      }
-
       document.getElementById('sg-search-view').style.display = 'none';
       document.getElementById('sgFilters').style.display      = 'none';
       document.getElementById('sg-detail-view').style.display = 'block';
       document.getElementById('section-scriptget').scrollIntoView({ block: 'start' });
 
-      /* Fetch full details from /api/getscript (description, discord, keyLink, etc.) */
-      if (s.slug) {
-        try {
-          const res  = await fetch(`/api/getscript?slug=${encodeURIComponent(s.slug)}`);
-          const data = await res.json();
-          /* ScriptBlox fetch endpoint may wrap in { script: {...} } or { result: {...} } */
-          const full = data.script || (data.result && data.result.script) || data;
-          if (full && (full.title || full._id)) {
-            const merged = { ...s, ...full };
-            sgPopulateDetail(merged);
-          } else {
-            /* Fetch failed/empty — mark desc as confirmed empty */
-            if (!hasInitialDesc) sgSetDesc('');
-          }
-        } catch(e) {
-          if (!hasInitialDesc) sgSetDesc('');
+      /* Fetch full details (description, keyLink, discord, full script, etc.)
+         No spinner — just silently update when data arrives so there's no flash */
+      if (s.slug || s._id) {
+        const full = await sgCallGetscript(s.slug, s._id);
+        if (full) {
+          sgPopulateDetail({ ...s, ...full });
         }
+        /* If fetch fails, we silently keep the initial data (desc hidden if empty) */
       }
     }
 
