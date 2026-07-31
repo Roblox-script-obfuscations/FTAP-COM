@@ -1996,7 +1996,8 @@ We encourage you to join our Discord https://discord.gg/JQn3XYmBDm  ]]</span>
       /* Description — ScriptBlox uses several field names.
          Pass '' (hide) not null (spinner) because spinner is set
          explicitly by sgOpenDetail only when a fetch is in flight. */
-      sgSetDesc(s.desc || s.description || s.rawdesc || s.descriptionHtml || '');
+      /* ScriptBlox uses "features" as the description field in individual fetch responses */
+      sgSetDesc(s.features || s.desc || s.description || s.rawdesc || s.descriptionHtml || '');
 
       /* Script code */
       document.getElementById('sgDetailScript').textContent = s.script || '-- スクリプトが見つかりませんでした';
