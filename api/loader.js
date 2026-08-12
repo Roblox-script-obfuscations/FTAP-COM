@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const r = await fetch('https://pastefy.app/Brv49k3M/raw');
+    const r = await fetch('https://pastefy.app/CWZwK0tc/raw');
     const text = await r.text();
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Content-Type', 'text/plain');
